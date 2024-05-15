@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity">
+    tools:context=".activity.LoginActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_main"
@@ -47,6 +47,7 @@
             android:layout_height="55dp"
             android:gravity="center_vertical"
             android:hint="@string/email"
+            android:textColor="@color/black_100"
             android:inputType="textEmailAddress"
             android:textSize="18sp"
             android:paddingStart="10sp"
@@ -73,6 +74,7 @@
             android:layout_height="55dp"
             android:gravity="center_vertical"
             android:hint="@string/password"
+            android:textColor="@color/black_100"
             android:inputType="textPassword"
             android:textSize="18sp"
             android:paddingStart="10sp"

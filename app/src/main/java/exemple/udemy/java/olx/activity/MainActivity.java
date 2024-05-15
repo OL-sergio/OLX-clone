@@ -1,4 +1,4 @@
-package exemple.udemy.java.olx;
+package exemple.udemy.java.olx.activity;
 
 import android.os.Bundle;
 
@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import exemple.udemy.java.olx.R;
 
 public class MainActivity extends AppCompatActivity {
 

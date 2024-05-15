@@ -13,7 +13,7 @@
         android:theme="@style/Theme.OLXclone"
         tools:targetApi="31">
         <activity
-            android:name=".LoginActivity"
+            android:name=".activity.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,7 +24,7 @@
 
 
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.MainActivity"
             android:exported="false"
             android:theme="@style/Base.Theme.OLXclone">
 
