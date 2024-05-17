@@ -4,7 +4,7 @@
     <string name="login">Login</string>
     <string name="registration">Registration</string>
     <string name="email">Email</string>
-    <string name="olx">Olx</string>
+    <string name="olx">OLX</string>
     <string name="registado_com_sucesso">Registado com sucesso!</string>
     <string name="intreduza_uma_senha_mais_forte">Intreduza uma senha mais forte!</string>
     <string name="intreduza_um_email_valido">Intreduza um email valido!</string>
@@ -14,4 +14,7 @@
     <string name="introduzir_palavra_pass">Introduzir palavra pass!</string>
     <string name="erro_ao_fazer_login">Erro ao fazer login!</string>
     <string name="login_com_sucesso">Login com sucesso!</string>
+    <string name="register_entrar">Register / Entrar</string>
+    <string name="meus_an_ncios">Meus Anúncios</string>
+    <string name="sair">Sair</string>
 </resources>

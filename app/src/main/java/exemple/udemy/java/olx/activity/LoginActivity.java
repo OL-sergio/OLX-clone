@@ -3,6 +3,7 @@ package exemple.udemy.java.olx.activity;
 import static exemple.udemy.java.olx.R.string.introduzir_email;
 import static exemple.udemy.java.olx.R.string.introduzir_palavra_pass;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
@@ -87,9 +88,6 @@ public class LoginActivity extends AppCompatActivity {
                                                 if ( task.isSuccessful() ){
                                                     Toast.makeText(getApplicationContext(),
                                                             R.string.registado_com_sucesso, Toast.LENGTH_LONG).show();
-
-                                                    //intenten to activity
-
                                                 }else {
                                                     String exceptionError = "";
                                                     try {
@@ -117,6 +115,7 @@ public class LoginActivity extends AppCompatActivity {
                                     if(task.isSuccessful()){
                                         Toast.makeText(getApplicationContext(),
                                                 R.string.login_com_sucesso, Toast.LENGTH_LONG).show();
+                                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
                                     }else{
                                         Toast.makeText(getApplicationContext(),
                                                 R.string.erro_ao_fazer_login, Toast.LENGTH_LONG).show();
