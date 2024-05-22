@@ -4,19 +4,23 @@
         <!-- Customize your light theme here. -->
 
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
-
         <item name="android:textColor">@color/black_100</item>
         <item name="android:textColorPrimary">@color/white_100</item>
         <item name="android:itemBackground">@color/white_100</item>
         <item name="android:colorBackground">@color/white_100</item>
+        <item name="android:colorControlNormal">@color/white_100</item>
+        <item name="popupMenuBackground"/>
 
 
         <item name="colorPrimary">@color/hot_pink_100</item>
-        <item name="colorPrimaryDark">@color/hot_pink_200</item>
-        <item name="android:statusBarColor">@color/white_100</item>
-        <item name="colorOnPrimary">@color/orange_100</item>
+        <item name="colorOnPrimary">@color/hot_pink_200</item>
+        <item name="colorAccent">@color/white_100</item>
+        <item name="android:statusBarColor">@color/hot_pink_200</item>
+
     </style>
-    
+
+
+
     <style name="buttonPrimary" parent="ThemeOverlay.MaterialComponents.Dark">
         <item name="colorControlHighlight">@color/orange_100</item>
         <item name="colorButtonNormal">@color/hot_pink_200</item>

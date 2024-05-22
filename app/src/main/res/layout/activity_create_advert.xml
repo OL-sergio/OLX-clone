@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".activity.CreateAdvertActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:fitsSystemWindows="false"
+        android:theme="@style/Base.Theme.OLXclone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar_create_advert"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="170dp"
+            android:orientation="horizontal"
+            android:padding="6dp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
+
+            <ImageView
+                android:id="@+id/imageView_create_advert_a"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:importantForAccessibility="no"
+                android:src="@drawable/padrao" />
+
+            <ImageView
+                android:id="@+id/imageView_create_advert_b"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:importantForAccessibility="no"
+                android:src="@drawable/padrao" />
+
+            <ImageView
+                android:id="@+id/imageView_create_advert_c"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:importantForAccessibility="no"
+                android:src="@drawable/padrao" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginBottom="@dimen/_20sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+
+            <Spinner
+                android:id="@+id/spinner_create_advert_status"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/dw_rectangle_round_corners_grey"
+                android:layout_height="60dp" />
+
+            <Spinner
+                android:id="@+id/spinner_create_advert_category"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/dw_rectangle_round_corners_grey"
+                android:layout_height="60dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/_25sdp"
+            android:orientation="vertical">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginBottom="16dp"
+                android:hint="@string/title"
+                android:paddingStart="12dp"
+                android:inputType="text"
+                android:background="@drawable/dw_rectangle_round_corners_grey" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginBottom="16dp"
+                android:hint="@string/valor"
+                android:paddingStart="12dp"
+                android:inputType="text"
+                android:background="@drawable/dw_rectangle_round_corners_grey" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="125dp"
+                android:layout_marginBottom="16dp"
+                android:hint="@string/descri_o"
+                android:paddingStart="12dp"
+                android:inputType="text"
+                android:background="@drawable/dw_rectangle_round_corners_grey"
+                />
+
+        </LinearLayout>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:textColor="@color/white_100"
+            android:text="@string/criar_an_ncio"
+            android:textSize="18sp"
+            android:textAllCaps="true"
+            android:background="@drawable/button_ripple_effect"
+            />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

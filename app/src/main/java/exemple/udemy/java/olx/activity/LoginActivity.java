@@ -5,22 +5,16 @@ import static exemple.udemy.java.olx.R.string.introduzir_palavra_pass;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.InputType;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Switch;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -39,10 +33,10 @@ import exemple.udemy.java.olx.helper.SettingsFirebase;
 
 public class LoginActivity extends AppCompatActivity {
 
-
     private Button buttonLogin;
     private TextInputEditText textInputEditTextEmail;
     private TextInputEditText textInputEditTextPassword;
+
     private Switch switchAcess;
 
     private FirebaseAuth auth;
@@ -50,23 +44,16 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
 
         Toolbar toolbar = findViewById(R.id.toolbar_main);
         toolbar.setTitle(R.string.olx);
         setSupportActionBar(toolbar);
 
-        Window window = this.getWindow();
+       /* Window window = this.getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        window.setStatusBarColor(getColor(R.color.hot_pink_200));
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+        window.setStatusBarColor(getColor(R.color.hot_pink_200));*/
 
         components();
         auth = SettingsFirebase.getFirebaseAuth();
@@ -115,7 +102,7 @@ public class LoginActivity extends AppCompatActivity {
                                     if(task.isSuccessful()){
                                         Toast.makeText(getApplicationContext(),
                                                 R.string.login_com_sucesso, Toast.LENGTH_LONG).show();
-                                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                        startActivity(new Intent(getApplicationContext(), AdvertsActivity.class));
                                     }else{
                                         Toast.makeText(getApplicationContext(),
                                                 R.string.erro_ao_fazer_login, Toast.LENGTH_LONG).show();
