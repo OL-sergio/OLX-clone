@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="_20sdp">10sp</dimen>
+    <dimen name="_10sdp">10sp</dimen>
     <dimen name="_25sdp">25sp</dimen>
     <dimen name="fab_margin">16dp</dimen>
 </resources>

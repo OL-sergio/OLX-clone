@@ -39,9 +39,9 @@
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="170dp"
+            android:layout_marginBottom="16dp"
             android:orientation="horizontal"
             android:padding="6dp"
-            android:layout_marginBottom="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
@@ -75,7 +75,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:layout_marginBottom="@dimen/_20sdp"
+            android:layout_marginBottom="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout">
@@ -83,64 +83,90 @@
             <Spinner
                 android:id="@+id/spinner_create_advert_status"
                 android:layout_width="wrap_content"
-                android:layout_weight="1"
+                android:layout_height="60dp"
                 android:layout_marginEnd="16dp"
-                android:background="@drawable/dw_rectangle_round_corners_grey"
-                android:layout_height="60dp" />
+                android:layout_weight="1"
+                android:textColor="@color/black_100"
+                android:background="@drawable/dw_rectangle_round_corners_grey" />
 
             <Spinner
                 android:id="@+id/spinner_create_advert_category"
                 android:layout_width="wrap_content"
+                android:layout_height="60dp"
                 android:layout_weight="1"
-                android:background="@drawable/dw_rectangle_round_corners_grey"
-                android:layout_height="60dp" />
+                android:textColor="@color/black_100"
+                android:background="@drawable/dw_rectangle_round_corners_grey" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/_25sdp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="10sp">
 
             <EditText
+                android:id="@+id/editText_create_advert_title"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_marginBottom="16dp"
+                android:background="@drawable/dw_rectangle_round_corners_grey"
+                android:textColor="@color/black_100"
                 android:hint="@string/title"
-                android:paddingStart="12dp"
                 android:inputType="text"
-                android:background="@drawable/dw_rectangle_round_corners_grey" />
+                android:paddingStart="12dp" />
 
-            <EditText
+            <com.blackcat.currencyedittext.CurrencyEditText
+                android:id="@+id/currencyEditText_create_advert_price"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_marginBottom="16dp"
+                android:background="@drawable/dw_rectangle_round_corners_grey"
+                android:textColor="@color/black_100"
                 android:hint="@string/valor"
                 android:paddingStart="12dp"
-                android:inputType="text"
-                android:background="@drawable/dw_rectangle_round_corners_grey" />
+                tools:ignore="RtlSymmetry" />
 
             <EditText
+                android:id="@+id/editText_create_advert_description"
                 android:layout_width="match_parent"
                 android:layout_height="125dp"
-                android:layout_marginBottom="16dp"
-                android:hint="@string/descri_o"
-                android:paddingStart="12dp"
-                android:inputType="text"
+                android:layout_marginBottom="14dp"
+                android:autofillHints=""
                 android:background="@drawable/dw_rectangle_round_corners_grey"
-                />
+                android:textColor="@color/black_100"
+                android:hint="@string/descri_o"
+                android:gravity="top"
+                android:inputType="text"
+                android:paddingTop="12dp"
+                android:paddingStart="12dp"
+                tools:ignore="RtlSymmetry" />
+
+            <com.santalu.maskara.widget.MaskEditText
+                android:id="@+id/maskEditText_create_advert_phone"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginBottom="10dp"
+                android:paddingStart="12dp"
+                android:background="@drawable/dw_rectangle_round_corners_grey"
+                android:textColor="@color/black_100"
+                android:inputType="number"
+                android:hint="@string/telefone"
+                app:mask="(+___) ___ ___ ___"
+                app:maskCharacter="_"
+                app:maskStyle="completable" />
 
         </LinearLayout>
+
         <Button
+            android:id="@+id/button_create_advert"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_gravity="center"
-            android:textColor="@color/white_100"
-            android:text="@string/criar_an_ncio"
-            android:textSize="18sp"
-            android:textAllCaps="true"
             android:background="@drawable/button_ripple_effect"
-            />
+            android:text="@string/criar_an_ncio"
+            android:textAllCaps="true"
+            android:textColor="@color/white_100"
+            android:textSize="18sp" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

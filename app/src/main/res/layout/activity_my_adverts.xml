@@ -25,7 +25,7 @@
         android:id="@+id/recyclerView_my_adverts"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/_20sdp"
+        android:padding="@dimen/_25sdp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
