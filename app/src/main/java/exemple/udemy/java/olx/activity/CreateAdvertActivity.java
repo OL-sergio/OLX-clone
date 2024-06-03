@@ -16,9 +16,11 @@ import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
@@ -53,6 +55,8 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
     EditText createAdvertDescription;
     CurrencyEditText createAdvertPrice;
     MaskEditText createAdvertPhoneNumber;
+    Spinner spinnerAdvertCategory;
+    Spinner spinnerAdvertState;
     Button createAdvert;
     ImageView imageViewAdvertA;
     ImageView imageViewAdvertB;
@@ -84,6 +88,8 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
 
         components();
         saveAdvert();
+        loadSpinner();
+
 
         if (!checkStoragePermissions()) {
             requestForStoragePermissions();
@@ -92,8 +98,6 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
             // AndroidPermissions are granted, proceed with your logic
 
         }
-
-
         /*
         Window window = this.getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -108,6 +112,25 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
             }
         });
 
+
+    }
+
+    private void loadSpinner() {
+       /* String[] statesStrings = new String[]{
+          "SP", "MT"
+        };*/
+
+        String[] statesStrings = getResources().getStringArray(R.array.states);
+        ArrayAdapter<String> adapterStates = new ArrayAdapter<String>(
+                this, android.R.layout.simple_spinner_item, statesStrings);
+        adapterStates.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerAdvertState.setAdapter(adapterStates);
+
+        String[] categoriesStrings = getResources().getStringArray(R.array.categories);
+        ArrayAdapter<String> adapterCategories = new ArrayAdapter<String>(
+                this, android.R.layout.simple_spinner_item, categoriesStrings);
+        adapterCategories.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerAdvertCategory.setAdapter(adapterCategories);
 
     }
 
@@ -127,6 +150,7 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
              galleryActivityResultLauncherImageC.launch(intent);
         }
 
+        Log.d(TAG, "listOfPhotos"+ listOfPhotos);
     }
 
     ActivityResultLauncher<Intent>  galleryActivityResultLauncherImageA = registerForActivityResult(
@@ -143,7 +167,8 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
                         Glide.with(this)
                                 .load(imageUrl)
                                 .into(imageViewAdvertA);
-                        listOfPhotos.add(imageUrl.toString());
+                        listOfPhotosToArray(imageUrl);
+
 
                     } catch (IOException e) {
                         throw new RuntimeException(e);
@@ -165,7 +190,7 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
                         Glide.with(this)
                                 .load(imageUrl)
                                 .into(imageViewAdvertB);
-                        listOfPhotos.add(imageUrl.toString());
+                        listOfPhotosToArray(imageUrl);
 
                     } catch (IOException e) {
                         throw new RuntimeException(e);
@@ -187,13 +212,18 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
                         Glide.with(this)
                                 .load(imageUrl)
                                 .into(imageViewAdvertC);
-                        listOfPhotos.add(imageUrl.toString());
+                        listOfPhotosToArray(imageUrl);
 
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
                 }
             });
+
+
+    private void listOfPhotosToArray(Bitmap imageUrl) {
+        listOfPhotos.add(imageUrl.toString());
+    }
 
 
 
@@ -316,6 +346,9 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
         imageViewAdvertA = binding.imageViewCreateAdvertA;
         imageViewAdvertB = binding.imageViewCreateAdvertB;
         imageViewAdvertC = binding.imageViewCreateAdvertC;
+
+        spinnerAdvertCategory = binding.spinnerCreateAdvertCategory;
+        spinnerAdvertState = binding.spinnerCreateAdvertStatus;
 
         imageViewAdvertA.setOnClickListener(this);
         imageViewAdvertB.setOnClickListener(this);
