@@ -38,8 +38,8 @@
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
-            android:layout_height="170dp"
-            android:layout_marginBottom="16dp"
+            android:layout_height="150dp"
+            android:layout_marginBottom="6sp"
             android:orientation="horizontal"
             android:padding="6dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -51,6 +51,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:scaleX="0.9"
+                android:scaleY="0.9"
                 android:importantForAccessibility="no"
                 android:src="@drawable/padrao" />
 
@@ -59,6 +61,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:scaleX="0.9"
+                android:scaleY="0.9"
                 android:importantForAccessibility="no"
                 android:src="@drawable/padrao" />
 
@@ -67,6 +71,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:scaleX="0.9"
+                android:scaleY="0.9"
                 android:importantForAccessibility="no"
                 android:src="@drawable/padrao" />
 
@@ -74,7 +80,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -83,7 +89,7 @@
             <Spinner
                 android:id="@+id/spinner_create_advert_status"
                 android:layout_width="wrap_content"
-                android:layout_height="60dp"
+                android:layout_height="35dp"
                 android:layout_marginEnd="16dp"
                 android:layout_weight="1"
                 android:textColor="@color/black_100"
@@ -92,7 +98,7 @@
             <Spinner
                 android:id="@+id/spinner_create_advert_category"
                 android:layout_width="wrap_content"
-                android:layout_height="60dp"
+                android:layout_height="35dp"
                 android:layout_weight="1"
                 android:textColor="@color/black_100"
                 android:background="@drawable/dw_rectangle_round_corners_grey" />

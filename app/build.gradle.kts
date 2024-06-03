@@ -58,5 +58,7 @@ dependencies {
     implementation(libs.maskara)
     //https://github.com/BlacKCaT27/CurrencyEditText
     implementation(libs.library)
+    //Glide
+    implementation(libs.bumptech.glide)
 
 }

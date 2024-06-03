@@ -1,18 +1,13 @@
 package exemple.udemy.java.olx.activity;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.Window;
-import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.Toolbar;
-
 import com.google.firebase.auth.FirebaseAuth;
 
 import exemple.udemy.java.olx.R;
@@ -24,7 +19,7 @@ public class AdvertsActivity extends AppCompatActivity {
     private ActivityAdvertsBinding binding;
     private FirebaseAuth auth;
 
-    @SuppressLint("NewApi")
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

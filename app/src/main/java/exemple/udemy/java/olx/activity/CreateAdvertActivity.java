@@ -3,18 +3,22 @@ package exemple.udemy.java.olx.activity;
 import static android.content.ContentValues.TAG;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
@@ -29,15 +33,19 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.blackcat.currencyedittext.CurrencyEditText;
+import com.bumptech.glide.Glide;
 import com.santalu.maskara.widget.MaskEditText;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
 import exemple.udemy.java.olx.R;
 import exemple.udemy.java.olx.databinding.ActivityCreateAdvertBinding;
 
-public class CreateAdvertActivity extends AppCompatActivity {
+public class CreateAdvertActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ActivityCreateAdvertBinding binding;
 
@@ -46,8 +54,14 @@ public class CreateAdvertActivity extends AppCompatActivity {
     CurrencyEditText createAdvertPrice;
     MaskEditText createAdvertPhoneNumber;
     Button createAdvert;
+    ImageView imageViewAdvertA;
+    ImageView imageViewAdvertB;
+    ImageView imageViewAdvertC;
 
     private static final int STORAGE_PERMISSION_CODE = 23;
+
+    private List<String> listOfPhotos = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +84,6 @@ public class CreateAdvertActivity extends AppCompatActivity {
 
         components();
         saveAdvert();
-
 
         if (!checkStoragePermissions()) {
             requestForStoragePermissions();
@@ -98,16 +111,93 @@ public class CreateAdvertActivity extends AppCompatActivity {
 
     }
 
-    private void saveAdvert() {
-        //String value = createAdvertPrice.getHintString();
-        //long value = createAdvertPrice.getRawValue();
-        String value = createAdvertPrice.getText().toString();
-        String price = createAdvertPhoneNumber.getText().toString();
-        Log.d(TAG, "saveAdvert: " + value + " " + price);
+    @Override
+    public void onClick(View view) {
+
+        if (view.getId() == R.id.imageView_create_advert_a) {
+            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            galleryActivityResultLauncherImageA.launch(intent);
+        }
+        if (view.getId() == R.id.imageView_create_advert_b) {
+            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            galleryActivityResultLauncherImageB.launch(intent);
+        }
+        if (view.getId() == R.id.imageView_create_advert_c) {
+            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+             galleryActivityResultLauncherImageC.launch(intent);
+        }
 
     }
 
-    public boolean checkStoragePermissions(){
+    ActivityResultLauncher<Intent>  galleryActivityResultLauncherImageA = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK && result.getData()!= null) {
+
+                    Uri uri = result.getData().getData();
+                    Log.d(TAG, "onActivityResult"+ uri);
+
+                    Bitmap imageUrl = null;
+                    try {
+                        imageUrl = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                        Glide.with(this)
+                                .load(imageUrl)
+                                .into(imageViewAdvertA);
+                        listOfPhotos.add(imageUrl.toString());
+
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            });
+
+    ActivityResultLauncher<Intent>  galleryActivityResultLauncherImageB = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK && result.getData()!= null) {
+
+                    Uri uri = result.getData().getData();
+                    Log.d(TAG, "onActivityResult"+ uri);
+
+                    Bitmap imageUrl = null;
+                    try {
+                        imageUrl = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                        Glide.with(this)
+                                .load(imageUrl)
+                                .into(imageViewAdvertB);
+                        listOfPhotos.add(imageUrl.toString());
+
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            });
+
+    ActivityResultLauncher<Intent>  galleryActivityResultLauncherImageC = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK && result.getData()!= null) {
+
+                    Uri uri = result.getData().getData();
+                    Log.d(TAG, "onActivityResult"+ uri);
+
+                    Bitmap imageUrl = null;
+                    try {
+                        imageUrl = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                        Glide.with(this)
+                                .load(imageUrl)
+                                .into(imageViewAdvertC);
+                        listOfPhotos.add(imageUrl.toString());
+
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            });
+
+
+
+   public boolean checkStoragePermissions(){
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
             //Android is 11 (R) or above
             return Environment.isExternalStorageManager();
@@ -120,7 +210,7 @@ public class CreateAdvertActivity extends AppCompatActivity {
         }
     }
 
-    public void requestForStoragePermissions() {
+    private void requestForStoragePermissions() {
         //Android is 11 (R) or above
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
             try {
@@ -139,7 +229,7 @@ public class CreateAdvertActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(
                     this,
                     new String[]{
-                            android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
                             Manifest.permission.READ_EXTERNAL_STORAGE
                     },
                     STORAGE_PERMISSION_CODE
@@ -167,20 +257,20 @@ public class CreateAdvertActivity extends AppCompatActivity {
                         }
                     });
 
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == STORAGE_PERMISSION_CODE) {
-            if (grantResults.length > 0) {
+        if(requestCode == STORAGE_PERMISSION_CODE){
+            if(grantResults.length > 0){
                 boolean write = grantResults[0] == PackageManager.PERMISSION_GRANTED;
                 boolean read = grantResults[1] == PackageManager.PERMISSION_GRANTED;
 
-                if (read && write) {
-                    Toast.makeText(this, "Storage AndroidPermissions Granted", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, "Storage AndroidPermissions Denied", Toast.LENGTH_SHORT).show();
+                if(read && write){
+                    Toast.makeText(CreateAdvertActivity.this, "Storage Permissions Granted", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(CreateAdvertActivity.this, "Storage Permissions Denied", Toast.LENGTH_SHORT).show();
                     alertValidatePermissions();
-
                 }
             }
         }
@@ -204,6 +294,15 @@ public class CreateAdvertActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    private void saveAdvert() {
+        //String value = createAdvertPrice.getHintString();
+        //long value = createAdvertPrice.getRawValue();
+        String value = createAdvertPrice.getText().toString();
+        String price = createAdvertPhoneNumber.getText().toString();
+        Log.d(TAG, "saveAdvert: " + value + " " + price);
+
+    }
+
 
     private void components() {
         createAdvertPrice  = binding.currencyEditTextCreateAdvertPrice;
@@ -212,7 +311,15 @@ public class CreateAdvertActivity extends AppCompatActivity {
         createAdvertDescription = binding.editTextCreateAdvertDescription;
         createAdvert = binding.buttonCreateAdvert;
 
-        Locale locale = new Locale("US", "en");
+        imageViewAdvertA = binding.imageViewCreateAdvertA;
+        imageViewAdvertB = binding.imageViewCreateAdvertB;
+        imageViewAdvertC = binding.imageViewCreateAdvertC;
+
+        imageViewAdvertA.setOnClickListener(this);
+        imageViewAdvertB.setOnClickListener(this);
+        imageViewAdvertC.setOnClickListener(this);
+
+        Locale locale = new Locale("pt", "PT");
         createAdvertPrice.setTextLocale(locale);
 
     }
