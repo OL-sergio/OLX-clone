@@ -237,22 +237,24 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
-    public final ActivityResultLauncher<Intent> storageActivityResultLauncher =
+    private final ActivityResultLauncher<Intent> storageActivityResultLauncher =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                     new ActivityResultCallback<ActivityResult>(){
+
                         @Override
                         public void onActivityResult(ActivityResult o) {
                             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
                                 //Android is 11 (R) or above
                                 if(Environment.isExternalStorageManager()){
-                                    //Manage External Storage AndroidPermissions Granted
-                                    Log.d(TAG, "onActivityResult: Manage External Storage AndroidPermissions Granted");
+                                    //Manage External Storage Permissions Granted
+                                    Log.d(TAG, "onActivityResult: Manage External Storage Permissions Granted");
                                 }else{
-                                    Toast.makeText( CreateAdvertActivity.this, "Storage AndroidPermissions Denied", Toast.LENGTH_SHORT).show();
-                                 alertValidatePermissions();
+                                    Toast.makeText(CreateAdvertActivity.this, "Storage Permissions Denied", Toast.LENGTH_SHORT).show();
+                                    alertValidatePermissions();
                                 }
                             }else{
                                 //Below android 11
+
                             }
                         }
                     });
