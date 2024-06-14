@@ -51,16 +51,18 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
 
     private ActivityCreateAdvertBinding binding;
 
-    EditText createAdvertTitle;
-    EditText createAdvertDescription;
-    CurrencyEditText createAdvertPrice;
-    MaskEditText createAdvertPhoneNumber;
-    Spinner spinnerAdvertCategory;
-    Spinner spinnerAdvertState;
-    Button createAdvert;
-    ImageView imageViewAdvertA;
-    ImageView imageViewAdvertB;
-    ImageView imageViewAdvertC;
+    private EditText createAdvertTitle;
+    private EditText createAdvertDescription;
+    private CurrencyEditText createAdvertPrice;
+    private MaskEditText createAdvertPhoneNumber;
+    private Spinner spinnerAdvertCategory;
+    private Spinner spinnerAdvertState;
+    private Button createAdvert;
+    private ImageView imageViewAdvertA;
+    private ImageView imageViewAdvertB;
+    private ImageView imageViewAdvertC;
+
+    private Advert advert;
 
     private static final int STORAGE_PERMISSION_CODE = 23;
 
@@ -87,7 +89,6 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         components();
-        saveAdvert();
         loadSpinner();
 
 
@@ -107,7 +108,8 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
         createAdvert.setOnClickListener(new View.OnClickListener() {
 
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
+                validateDataAdvert(view);
                 saveAdvert();
             }
         });
@@ -326,13 +328,78 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
         dialog.show();
     }
 
-    private void saveAdvert() {
-        //String value = createAdvertPrice.getHintString();
-        //long value = createAdvertPrice.getRawValue();
-        String value = createAdvertPrice.getText().toString();
-        String price = createAdvertPhoneNumber.getText().toString();
-        Log.d(TAG, "saveAdvert: " + value + " " + price);
+    public void validateDataAdvert(View view) {
 
+      advert = advertConfiguration();
+
+        if( listOfPhotos.size() != 0 ){
+            if(!advert.getState().isEmpty()) {
+                if(!advert.getCategory().isEmpty()) {
+                    if (!advert.getTitle().isEmpty()){
+                        if (!advert.getPrice().isEmpty() && !advert.getPrice().equals("0")){
+                            if (!advert.getPhone().isEmpty() && advert.getPhone().length() >= 10){
+                                if (!advert.getDescription().isEmpty()){
+                                    saveAdvert();
+                                }else {
+                                    alertMessageError("Intreduza uma descrição!");
+                                }
+                            }else {
+                                alertMessageError("Intreduza o numero telemovel!");
+                            }
+                        }else {
+                            alertMessageError("Intreduza um preço!");
+                        }
+                    }else {
+                        alertMessageError("Intreduza um título!");
+                    }
+                }else{
+                    alertMessageError("Selecione pelo menos categoria!");
+                }
+            }else {
+                alertMessageError("Selecione pelo menos estado!");
+            }
+        } else {
+            alertMessageError("Selecione pelo menos uma foto!");
+        }
+    }
+
+    private void alertMessageError(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    private void saveAdvert() {
+        // Adds the size of the Array of photos
+        for (int i = 0; i < listOfPhotos.size(); i++) {
+            String urlImages = listOfPhotos.get(i);
+            int listSize = listOfPhotos.size();
+            saveStorageImage(urlImages, listSize, i);
+        }
+
+
+
+    }
+
+    private void saveStorageImage(String urlImages, int lisSize, int i) {
+    }
+
+    private Advert advertConfiguration() {
+
+        String state = spinnerAdvertState.getSelectedItem().toString();
+        String category = spinnerAdvertCategory.getSelectedItem().toString();
+        String title = createAdvertTitle.getText().toString();
+        String price = String.valueOf(createAdvertPrice.getRawValue());
+        String phone = createAdvertPhoneNumber.getText().toString();
+        String description = createAdvertDescription.getText().toString();
+
+        advert = new Advert();
+        advert.setCategory(category);
+        advert.setState(state);
+        advert.setTitle(title);
+        advert.setPrice(price);
+        advert.setPhone(phone);
+        advert.setDescription(description);
+
+        return advert;
     }
 
 
