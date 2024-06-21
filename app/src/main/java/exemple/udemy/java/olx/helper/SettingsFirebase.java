@@ -13,6 +13,12 @@ public class SettingsFirebase {
     public static StorageReference storageReference;
 
 
+    public static String getUserID(){
+        FirebaseAuth auth = getFirebaseAuth();
+        return auth.getCurrentUser().getUid();
+    }
+
+
     public static DatabaseReference getDatabaseReference(){
         if(databaseReference == null){
             databaseReference = FirebaseDatabase.getInstance().getReference();

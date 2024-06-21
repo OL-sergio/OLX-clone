@@ -8,12 +8,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -36,16 +39,31 @@ import androidx.core.content.ContextCompat;
 
 import com.blackcat.currencyedittext.CurrencyEditText;
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.santalu.maskara.widget.MaskEditText;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
 import exemple.udemy.java.olx.R;
 import exemple.udemy.java.olx.databinding.ActivityCreateAdvertBinding;
+import exemple.udemy.java.olx.helper.SettingsFirebase;
+import exemple.udemy.java.olx.model.Advert;
 
 public class CreateAdvertActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -63,10 +81,13 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
     private ImageView imageViewAdvertC;
 
     private Advert advert;
+    private FirebaseAuth auth;
 
     private static final int STORAGE_PERMISSION_CODE = 23;
 
-    private List<String> listOfPhotos = new ArrayList<>();
+    private List<byte[]> listOfPhotos = new ArrayList<>();
+
+   //private StorageReference storageReference;
 
 
     @Override
@@ -88,9 +109,12 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
         Objects.requireNonNull(getSupportActionBar());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        //storageReference = SettingsFirebase.getStorageReference();
+        auth = SettingsFirebase.getFirebaseAuth();
+
+
         components();
         loadSpinner();
-
 
         if (!checkStoragePermissions()) {
             requestForStoragePermissions();
@@ -160,16 +184,27 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
             result -> {
                 if (result.getResultCode() == Activity.RESULT_OK && result.getData()!= null) {
 
+                    imageViewAdvertA.setDrawingCacheEnabled(true);
+                    imageViewAdvertA.buildDrawingCache();
+
                     Uri uri = result.getData().getData();
                     Log.d(TAG, "onActivityResult"+ uri);
 
                     Bitmap imageUrl = null;
                     try {
                         imageUrl = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+
+                        Bitmap resizedBitmap = Bitmap.createScaledBitmap(imageUrl, 200, 200, true);
+
                         Glide.with(this)
-                                .load(imageUrl)
+                                .load(resizedBitmap)
                                 .into(imageViewAdvertA);
-                        listOfPhotosToArray(imageUrl);
+
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        imageUrl.compress(Bitmap.CompressFormat.JPEG, 65, baos);
+                        byte [] dataImage = baos.toByteArray();
+
+                        listOfPhotosToArray(dataImage);
 
 
                     } catch (IOException e) {
@@ -187,12 +222,21 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
                     Log.d(TAG, "onActivityResult"+ uri);
 
                     Bitmap imageUrl = null;
+
                     try {
                         imageUrl = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+
+                        Bitmap resizedBitmap = Bitmap.createScaledBitmap(imageUrl, 400, 400, true);
+
                         Glide.with(this)
-                                .load(imageUrl)
+                                .load(resizedBitmap)
                                 .into(imageViewAdvertB);
-                        listOfPhotosToArray(imageUrl);
+
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        imageUrl.compress(Bitmap.CompressFormat.JPEG, 65, baos);
+                        byte [] dataImage = baos.toByteArray();
+
+                        listOfPhotosToArray(dataImage);
 
                     } catch (IOException e) {
                         throw new RuntimeException(e);
@@ -211,10 +255,18 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
                     Bitmap imageUrl = null;
                     try {
                         imageUrl = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+
+                        Bitmap resizedBitmap = Bitmap.createScaledBitmap(imageUrl, 400, 400, true);
+
                         Glide.with(this)
-                                .load(imageUrl)
+                                .load(resizedBitmap)
                                 .into(imageViewAdvertC);
-                        listOfPhotosToArray(imageUrl);
+
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        imageUrl.compress(Bitmap.CompressFormat.JPEG, 65, baos);
+                        byte [] dataImage = baos.toByteArray();
+                        listOfPhotosToArray(dataImage);
+
 
                     } catch (IOException e) {
                         throw new RuntimeException(e);
@@ -223,8 +275,8 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
             });
 
 
-    private void listOfPhotosToArray(Bitmap imageUrl) {
-        listOfPhotos.add(imageUrl.toString());
+    private void listOfPhotosToArray(byte[] imageUrl) {
+        listOfPhotos.add(imageUrl);
     }
 
 
@@ -369,18 +421,40 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
 
     private void saveAdvert() {
         // Adds the size of the Array of photos
-        for (int i = 0; i < listOfPhotos.size(); i++) {
-            String urlImages = listOfPhotos.get(i);
+        for (int counter = 0; counter < listOfPhotos.size(); counter++) {
+            byte [] urlImages = listOfPhotos.get(counter);
             int listSize = listOfPhotos.size();
-            saveStorageImage(urlImages, listSize, i);
+            Log.d(TAG, "images" + listSize + " " + urlImages);
+            saveStorageImages(urlImages, listSize, counter);
         }
-
-
-
     }
 
-    private void saveStorageImage(String urlImages, int lisSize, int i) {
-    }
+
+
+   private void saveStorageImages(byte [] urlImages, int listSize, int counter) {
+        Log.d(TAG, "images" + urlImages);
+
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+        final StorageReference advertImageReference = storageReference.child("images")
+                .child("advert")
+                .child(advert.getIdAdvert())
+                .child("image" + counter + ".jpg" );
+
+        UploadTask uploadTask = advertImageReference.putBytes(urlImages);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                // ...
+            }
+        });
+
+   }
 
     private Advert advertConfiguration() {
 
@@ -402,6 +476,10 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
         return advert;
     }
 
+    private void errorMessage (String message){
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+
+    }
 
     private void components() {
         createAdvertPrice  = binding.currencyEditTextCreateAdvertPrice;

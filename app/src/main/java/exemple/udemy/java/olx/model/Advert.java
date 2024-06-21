@@ -1,9 +1,14 @@
-package exemple.udemy.java.olx.activity;
+package exemple.udemy.java.olx.model;
+
+import com.google.firebase.database.DatabaseReference;
 
 import java.util.List;
 
+import exemple.udemy.java.olx.helper.SettingsFirebase;
+
 public class Advert {
 
+    private String idAdvert;
     private String state;
     private String category;
     private String title;
@@ -14,6 +19,17 @@ public class Advert {
     List<String> Photos;
 
     public Advert() {
+        DatabaseReference advertReference = SettingsFirebase.getDatabaseReference()
+                .child("my_adverts");
+        setIdAdvert(advertReference.push().getKey());
+    }
+
+    public String getIdAdvert() {
+        return idAdvert;
+    }
+
+    public void setIdAdvert(String idAdvert) {
+        this.idAdvert = idAdvert;
     }
 
     public String getState() {

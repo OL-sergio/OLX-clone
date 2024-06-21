@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "562952598807",
+    "firebase_url": "https://olx-clone-6b7a9-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "olx-clone-6b7a9",
+    "storage_bucket": "olx-clone-6b7a9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:562952598807:android:e929008258bb540f353352",
+        "android_client_info": {
+          "package_name": "afafa.adad"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAH4mdXBvwcg-KjjuVgedyh38ns-UAW3aU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:562952598807:android:0914261cf6b23fce353352",
+        "android_client_info": {
+          "package_name": "exemple.udemy.java.olx"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAH4mdXBvwcg-KjjuVgedyh38ns-UAW3aU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
