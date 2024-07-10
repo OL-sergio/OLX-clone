@@ -9,22 +9,16 @@
         <item name="android:itemBackground">@color/white_100</item>
         <item name="android:colorBackground">@color/white_100</item>
         <item name="android:colorControlNormal">@color/white_100</item>
-        <item name="popupMenuBackground"/>
 
-
-
-        <item name="colorPrimary">@color/hot_pink_100</item>
-        <item name="colorOnPrimary">@color/hot_pink_200</item>
+        <item name="colorPrimary">@color/pink_100</item>
+        <item name="colorOnPrimary">@color/hot_pink_100</item>
         <item name="colorAccent">@color/white_100</item>
-        <item name="android:statusBarColor">@color/hot_pink_200</item>
-
+        <item name="android:statusBarColor">@color/hot_pink_100</item>
     </style>
-
-
 
     <style name="buttonPrimary" parent="ThemeOverlay.MaterialComponents.Dark">
         <item name="colorControlHighlight">@color/orange_100</item>
-        <item name="colorButtonNormal">@color/hot_pink_200</item>
+        <item name="colorButtonNormal">@color/hot_pink_100</item>
         <item name="android:textColorPrimary">@color/white_100</item>
     </style>
 

@@ -4,25 +4,25 @@ import static android.content.ContentValues.TAG;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.FileUtils;
 import android.provider.MediaStore;
 import android.provider.Settings;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -31,7 +31,6 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -39,23 +38,20 @@ import androidx.core.content.ContextCompat;
 
 import com.blackcat.currencyedittext.CurrencyEditText;
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.santalu.maskara.widget.MaskEditText;
 
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -64,6 +60,7 @@ import exemple.udemy.java.olx.R;
 import exemple.udemy.java.olx.databinding.ActivityCreateAdvertBinding;
 import exemple.udemy.java.olx.helper.SettingsFirebase;
 import exemple.udemy.java.olx.model.Advert;
+import exemple.udemy.java.olx.utilities.CustomHorizontalProgressDialog;
 
 public class CreateAdvertActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -79,16 +76,15 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
     private ImageView imageViewAdvertA;
     private ImageView imageViewAdvertB;
     private ImageView imageViewAdvertC;
+    private CustomHorizontalProgressDialog dialog;
 
     private Advert advert;
     private FirebaseAuth auth;
 
     private static final int STORAGE_PERMISSION_CODE = 23;
 
-    private List<byte[]> listOfPhotos = new ArrayList<>();
-
-   //private StorageReference storageReference;
-
+    private final List<byte[]> listOfPhotos = new ArrayList<>();
+    private final List<String> listOfPhotosUrl = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +101,11 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
             startActivity(intent);
             finish();
         });
+
+        dialog = new CustomHorizontalProgressDialog(this);
+
+
+
 
         Objects.requireNonNull(getSupportActionBar());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -164,16 +165,33 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
     public void onClick(View view) {
 
         if (view.getId() == R.id.imageView_create_advert_a) {
-            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            galleryActivityResultLauncherImageA.launch(intent);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY));
+                galleryActivityResultLauncherImageA.launch(intent);
+            } else {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                galleryActivityResultLauncherImageA.launch(intent);
+            }
         }
+
         if (view.getId() == R.id.imageView_create_advert_b) {
-            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            galleryActivityResultLauncherImageB.launch(intent);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT,  MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY));
+                galleryActivityResultLauncherImageB.launch(intent);
+            }else {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                galleryActivityResultLauncherImageB.launch(intent);
+            }
         }
+
         if (view.getId() == R.id.imageView_create_advert_c) {
-            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-             galleryActivityResultLauncherImageC.launch(intent);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY));
+                galleryActivityResultLauncherImageC.launch(intent);
+            } else {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                galleryActivityResultLauncherImageC.launch(intent);
+            }
         }
 
         Log.d(TAG, "listOfPhotos"+ listOfPhotos);
@@ -182,10 +200,7 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
     ActivityResultLauncher<Intent>  galleryActivityResultLauncherImageA = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
-                if (result.getResultCode() == Activity.RESULT_OK && result.getData()!= null) {
-
-                    imageViewAdvertA.setDrawingCacheEnabled(true);
-                    imageViewAdvertA.buildDrawingCache();
+               if (result.getResultCode() == Activity.RESULT_OK && result.getData()!= null) {
 
                     Uri uri = result.getData().getData();
                     Log.d(TAG, "onActivityResult"+ uri);
@@ -200,6 +215,8 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
                                 .load(resizedBitmap)
                                 .into(imageViewAdvertA);
 
+                        imageViewAdvertA.setDrawingCacheEnabled(true);
+                        imageViewAdvertA.buildDrawingCache();
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
                         imageUrl.compress(Bitmap.CompressFormat.JPEG, 65, baos);
                         byte [] dataImage = baos.toByteArray();
@@ -232,6 +249,8 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
                                 .load(resizedBitmap)
                                 .into(imageViewAdvertB);
 
+                        imageViewAdvertB.setDrawingCacheEnabled(true);
+                        imageViewAdvertB.buildDrawingCache();
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
                         imageUrl.compress(Bitmap.CompressFormat.JPEG, 65, baos);
                         byte [] dataImage = baos.toByteArray();
@@ -262,6 +281,8 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
                                 .load(resizedBitmap)
                                 .into(imageViewAdvertC);
 
+                        imageViewAdvertC.setDrawingCacheEnabled(true);
+                        imageViewAdvertC.buildDrawingCache();
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
                         imageUrl.compress(Bitmap.CompressFormat.JPEG, 65, baos);
                         byte [] dataImage = baos.toByteArray();
@@ -362,6 +383,117 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
+    public void validateDataAdvert(View view) {
+
+      advert = advertConfiguration();
+      String price = String.valueOf(createAdvertPrice.getRawValue());
+
+        if( listOfPhotos.size() != 0 ){
+            if(!advert.getState().isEmpty()) {
+                if(!advert.getCategory().isEmpty()) {
+                    if (!advert.getTitle().isEmpty()){
+                        if (!price.isEmpty() && !price.equals("0")){
+                            if (!advert.getPhone().isEmpty() && advert.getPhone().length() >= 10){
+                                if (!advert.getDescription().isEmpty()){
+                                    saveAdvert();
+                                }else {
+                                    alertMessage("Intreduza uma descrição!");
+                                }
+                            }else {
+                                alertMessage("Intreduza o numero telemovel!");
+                            }
+                        }else {
+                            alertMessage("Intreduza um preço!");
+                        }
+                    }else {
+                        alertMessage("Intreduza um título!");
+                    }
+                }else{
+                    alertMessage("Selecione pelo menos categoria!");
+                }
+            }else {
+                alertMessage("Selecione pelo menos estado!");
+            }
+        } else {
+            alertMessage("Selecione pelo menos uma foto!");
+        }
+    }
+
+    private void saveAdvert() {
+        // Adds the size of the Array of photos
+        for (int counter = 0; counter < listOfPhotos.size(); counter++) {
+            byte [] urlImages = listOfPhotos.get(counter);
+
+            showProgressDialog();
+
+            int listSize = listOfPhotos.size();
+            Log.d(TAG, "images" + listSize + " " + urlImages);
+            saveStorageImages(urlImages, listSize, counter);
+
+        }
+    }
+
+
+
+   private void saveStorageImages(byte[] urlImages, int listSize, int counter) {
+        Log.d(TAG, "images" + Arrays.toString(urlImages));
+
+
+
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+        final StorageReference advertImageReference = storageReference.child("images")
+                .child("advert")
+                .child(advert.getIdAdvert())
+                .child("image" + counter + ".jpg" );
+
+        UploadTask uploadTask = advertImageReference.putBytes(urlImages);
+        Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+           @Override
+           public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+               if (!task.isSuccessful()) {
+                   throw task.getException();
+               }
+
+               // Continue with the task to get the download URL
+               return advertImageReference.getDownloadUrl();
+           }
+           }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+               @Override
+               public void onComplete(@NonNull Task<Uri> task) {
+                   if (task.isSuccessful()) {
+                       Uri downloadUri = task.getResult();
+                       String urlConverter = downloadUri.toString();
+
+                       listOfPhotosUrl.add(urlConverter);
+
+                       if(listSize == listOfPhotosUrl.size()) {
+                            advert.setPhotos(listOfPhotosUrl);
+                            advert.saveMyAdvert();
+                            advert.savePublicAdvert();
+
+                            startActivity(new Intent(getApplicationContext(), MyAdvertsActivity.class));
+                            finish();
+
+                       }
+                       alertMessage("Anúncio criado com sucesso!");
+                       hideProgressDialog();
+
+                   } else {
+                       // Handle failures
+                       // ...
+                      alertMessage("Falha ao realizar salvar imagens!");
+                   }
+               }
+           });
+        urlTask.addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                String taskResult = String.valueOf(task.getResult());
+                Log.d(TAG, "onComplete: taskResult = " + taskResult);
+            }
+        });
+   }
+
     public void alertValidatePermissions(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.permiss_o_negada);
@@ -380,88 +512,28 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
         dialog.show();
     }
 
-    public void validateDataAdvert(View view) {
-
-      advert = advertConfiguration();
-
-        if( listOfPhotos.size() != 0 ){
-            if(!advert.getState().isEmpty()) {
-                if(!advert.getCategory().isEmpty()) {
-                    if (!advert.getTitle().isEmpty()){
-                        if (!advert.getPrice().isEmpty() && !advert.getPrice().equals("0")){
-                            if (!advert.getPhone().isEmpty() && advert.getPhone().length() >= 10){
-                                if (!advert.getDescription().isEmpty()){
-                                    saveAdvert();
-                                }else {
-                                    alertMessageError("Intreduza uma descrição!");
-                                }
-                            }else {
-                                alertMessageError("Intreduza o numero telemovel!");
-                            }
-                        }else {
-                            alertMessageError("Intreduza um preço!");
-                        }
-                    }else {
-                        alertMessageError("Intreduza um título!");
-                    }
-                }else{
-                    alertMessageError("Selecione pelo menos categoria!");
-                }
-            }else {
-                alertMessageError("Selecione pelo menos estado!");
-            }
-        } else {
-            alertMessageError("Selecione pelo menos uma foto!");
-        }
-    }
-
-    private void alertMessageError(String message) {
+    private void alertMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
-    private void saveAdvert() {
-        // Adds the size of the Array of photos
-        for (int counter = 0; counter < listOfPhotos.size(); counter++) {
-            byte [] urlImages = listOfPhotos.get(counter);
-            int listSize = listOfPhotos.size();
-            Log.d(TAG, "images" + listSize + " " + urlImages);
-            saveStorageImages(urlImages, listSize, counter);
-        }
+
+    public void hideProgressDialog() {
+        dialog.dismiss();
+    }
+
+    public void showProgressDialog() {
+        dialog.show();
     }
 
 
 
-   private void saveStorageImages(byte [] urlImages, int listSize, int counter) {
-        Log.d(TAG, "images" + urlImages);
-
-        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
-        final StorageReference advertImageReference = storageReference.child("images")
-                .child("advert")
-                .child(advert.getIdAdvert())
-                .child("image" + counter + ".jpg" );
-
-        UploadTask uploadTask = advertImageReference.putBytes(urlImages);
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle unsuccessful uploads
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-                // ...
-            }
-        });
-
-   }
 
     private Advert advertConfiguration() {
 
         String state = spinnerAdvertState.getSelectedItem().toString();
         String category = spinnerAdvertCategory.getSelectedItem().toString();
         String title = createAdvertTitle.getText().toString();
-        String price = String.valueOf(createAdvertPrice.getRawValue());
+        String price = createAdvertPrice.getText().toString();
         String phone = createAdvertPhoneNumber.getText().toString();
         String description = createAdvertDescription.getText().toString();
 
@@ -474,11 +546,6 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
         advert.setDescription(description);
 
         return advert;
-    }
-
-    private void errorMessage (String message){
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-
     }
 
     private void components() {

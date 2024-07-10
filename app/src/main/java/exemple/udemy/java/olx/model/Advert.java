@@ -24,6 +24,29 @@ public class Advert {
         setIdAdvert(advertReference.push().getKey());
     }
 
+    public void saveMyAdvert(){
+
+        String idUser = SettingsFirebase.getUserID();
+        DatabaseReference advertReference = SettingsFirebase.getDatabaseReference()
+                .child("my_adverts");
+
+        advertReference.child( idUser )
+                .child( getIdAdvert() )
+                .setValue(this);
+    }
+
+    public void savePublicAdvert(){
+
+
+        DatabaseReference advertReference = SettingsFirebase.getDatabaseReference()
+                .child("adverts");
+
+        advertReference.child( getState() )
+                .child( getCategory() )
+                .child( getIdAdvert() )
+                .setValue(this);
+    }
+
     public String getIdAdvert() {
         return idAdvert;
     }

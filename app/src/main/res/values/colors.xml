@@ -2,8 +2,9 @@
 <resources>
     <color name="black_100">#FF000000</color>
     <color name="white_100">#FFFFFFFF</color>
-    <color name="hot_pink_100">#9C27B0</color>
-    <color name="hot_pink_200">#7B1FA2</color>
+    <color name="pink_100">#9C27B0</color>
+    <color name="hot_pink_100">#7B1FA2</color>
+    <color name="hot_pink_20">#327B1FA2</color>
     <color name="orange_100">#FF5722</color>
     <color name="orange_25">#42FF5725</color>
     <color name="white_800">#88FFFFFF</color>

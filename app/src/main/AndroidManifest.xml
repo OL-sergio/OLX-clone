@@ -25,6 +25,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.OLXclone"
         tools:targetApi="31" >
+
         <activity
             android:name=".activity.CreateAdvertActivity"
             android:exported="true">
@@ -37,17 +38,18 @@
 
         <activity
             android:name=".activity.MyAdvertsActivity"
-            android:exported="true">
+            android:exported="false" >
         </activity>
+
         <activity
             android:name=".activity.LoginActivity"
             android:exported="false" >
         </activity>
+
         <activity
             android:name=".activity.AdvertsActivity"
             android:exported="true">
-
         </activity>
-    </application>
 
+    </application>
 </manifest>
