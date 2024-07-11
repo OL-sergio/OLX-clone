@@ -6,8 +6,6 @@ import static exemple.udemy.java.olx.R.string.introduzir_palavra_pass;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -28,10 +26,14 @@ import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import java.util.Objects;
 
 import exemple.udemy.java.olx.R;
+import exemple.udemy.java.olx.databinding.ActivityCreateAdvertBinding;
+import exemple.udemy.java.olx.databinding.ActivityLoginRegisterBinding;
 import exemple.udemy.java.olx.helper.SettingsFirebase;
 
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginRegisterActivity extends AppCompatActivity {
+
+    private ActivityLoginRegisterBinding binding;
 
     private Button buttonLogin;
     private TextInputEditText textInputEditTextEmail;
@@ -44,9 +46,10 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        binding = ActivityLoginRegisterBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        Toolbar toolbar = findViewById(R.id.toolbar_main);
+        Toolbar toolbar = binding.toolbarMain;
         toolbar.setTitle(R.string.olx);
         setSupportActionBar(toolbar);
 
@@ -90,7 +93,7 @@ public class LoginActivity extends AppCompatActivity {
                                                         exceptionError = getString(R.string.erro_ao_criar_utilizador) + e.getMessage();
                                                         e.printStackTrace();
                                                     }
-                                                    Toast.makeText(LoginActivity.this, exceptionError, Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(LoginRegisterActivity.this, exceptionError, Toast.LENGTH_SHORT).show();
                                                 }
                                             }
                                         });
@@ -124,10 +127,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void components() {
-        textInputEditTextEmail = findViewById(R.id.textView_LoginEmail);
-        textInputEditTextPassword = findViewById(R.id.textView_LoginPassword);
-        buttonLogin = findViewById(R.id.button_loginUser);
-        switchAcess = findViewById(R.id.switch_longin);
+        textInputEditTextEmail = binding.textViewLoginEmail;
+        textInputEditTextPassword = binding.textViewLoginPassword;
+        buttonLogin = binding.buttonLoginUser;
+        switchAcess = binding.switchLongin;
 
     }
 }

@@ -25,7 +25,7 @@
         android:id="@+id/recyclerView_my_adverts"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/_25sdp"
+        android:layout_margin="@dimen/_16sp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -34,11 +34,11 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="@dimen/fab_margin"
-        app:fabSize="auto"
-        android:backgroundTint="@color/orange_100"
         android:layout_marginBottom="36sp"
+        android:backgroundTint="@color/orange_100"
         android:importantForAccessibility="no"
-        app:tint="@color/white_100"
-        android:src="@drawable/ic_add_36" />
+        android:src="@drawable/ic_add_36"
+        app:fabSize="normal"
+        app:tint="@color/white_100" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

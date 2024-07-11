@@ -5,6 +5,10 @@ import android.os.Bundle;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,18 +24,30 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 import exemple.udemy.java.olx.R;
+import exemple.udemy.java.olx.adapter.AdapterAdverts;
 import exemple.udemy.java.olx.databinding.ActivityMyAdvertsBinding;
 import exemple.udemy.java.olx.helper.SettingsFirebase;
+import exemple.udemy.java.olx.model.Advert;
 
 public class MyAdvertsActivity extends AppCompatActivity {
 
     private ActivityMyAdvertsBinding binding;
+    private RecyclerView recyclerViewAdverts;
+    private List<Advert> advertList = new ArrayList<>();
+    private AdapterAdverts adapterAdverts;
+    private DatabaseReference databaseReferenceUserReference;
 
-    @Override
+
+     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMyAdvertsBinding.inflate(getLayoutInflater());
@@ -50,6 +66,13 @@ public class MyAdvertsActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        databaseReferenceUserReference = SettingsFirebase.getDatabaseReference()
+                .child("my_adverts")
+                .child(SettingsFirebase.getUserID());
+
+        components();
+
+
        /* Window window = this.getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -59,5 +82,40 @@ public class MyAdvertsActivity extends AppCompatActivity {
             startActivity(new Intent(getApplicationContext(), CreateAdvertActivity.class ));
             finish();
         });
+
+        recyclerViewAdverts.setLayoutManager( new LinearLayoutManager(this));
+        recyclerViewAdverts.setHasFixedSize(true);
+
+        adapterAdverts = new AdapterAdverts(advertList, this);
+        recyclerViewAdverts.setAdapter(adapterAdverts);
+
+        recoverAdverts();
+    }
+
+    private void recoverAdverts() {
+
+         databaseReferenceUserReference.addValueEventListener(new ValueEventListener() {
+             @Override
+             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                advertList.clear();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    advertList.add(dataSnapshot.getValue(Advert.class));
+
+                }
+
+                Collections.reverse(advertList);
+                adapterAdverts.notifyDataSetChanged();
+             }
+
+             @Override
+             public void onCancelled(@NonNull DatabaseError error) {
+
+             }
+         });
+
+    }
+
+    private void components() {
+        recyclerViewAdverts = binding.recyclerViewMyAdverts;
     }
 }

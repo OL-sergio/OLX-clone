@@ -63,5 +63,7 @@ dependencies {
     implementation(libs.library)
     //Glide
     implementation(libs.bumptech.glide)
+    //Picasso
+    implementation (libs.picasso)
 
 }
