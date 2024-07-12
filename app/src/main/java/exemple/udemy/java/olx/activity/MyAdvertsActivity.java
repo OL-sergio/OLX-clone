@@ -1,10 +1,12 @@
 package exemple.udemy.java.olx.activity;
 
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.icu.text.Transliterator;
 import android.os.Bundle;
 
-import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -13,17 +15,10 @@ import com.google.firebase.database.ValueEventListener;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
+import android.widget.AdapterView;
 
 import androidx.appcompat.widget.Toolbar;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -35,8 +30,10 @@ import java.util.Objects;
 import exemple.udemy.java.olx.R;
 import exemple.udemy.java.olx.adapter.AdapterAdverts;
 import exemple.udemy.java.olx.databinding.ActivityMyAdvertsBinding;
+import exemple.udemy.java.olx.helper.RecyclerItemClickListener;
 import exemple.udemy.java.olx.helper.SettingsFirebase;
 import exemple.udemy.java.olx.model.Advert;
+import exemple.udemy.java.olx.utilities.CustomHorizontalProgressDialog;
 
 public class MyAdvertsActivity extends AppCompatActivity {
 
@@ -46,8 +43,10 @@ public class MyAdvertsActivity extends AppCompatActivity {
     private AdapterAdverts adapterAdverts;
     private DatabaseReference databaseReferenceUserReference;
 
+    private CustomHorizontalProgressDialog dialog;
 
-     @Override
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMyAdvertsBinding.inflate(getLayoutInflater());
@@ -65,6 +64,8 @@ public class MyAdvertsActivity extends AppCompatActivity {
 
         Objects.requireNonNull(getSupportActionBar());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        dialog = new CustomHorizontalProgressDialog(this);
 
         databaseReferenceUserReference = SettingsFirebase.getDatabaseReference()
                 .child("my_adverts")
@@ -90,9 +91,40 @@ public class MyAdvertsActivity extends AppCompatActivity {
         recyclerViewAdverts.setAdapter(adapterAdverts);
 
         recoverAdverts();
+
+        recyclerViewAdverts.addOnItemTouchListener(
+                new RecyclerItemClickListener(
+                        this, recyclerViewAdverts, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+
+                    }
+
+
+                    @Override
+                    public void onLongItemClick(View view, int position) {
+                        Advert selectedAdvert = advertList.get(position);
+                        selectedAdvert.deleteMyAdvert();
+                        selectedAdvert.deletePublicAdvert();
+
+                        adapterAdverts.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                    }
+                }
+
+                ));
+
+
     }
 
+
     private void recoverAdverts() {
+
+        dialog.show();
 
          databaseReferenceUserReference.addValueEventListener(new ValueEventListener() {
              @Override
@@ -105,6 +137,8 @@ public class MyAdvertsActivity extends AppCompatActivity {
 
                 Collections.reverse(advertList);
                 adapterAdverts.notifyDataSetChanged();
+
+                dialog.dismiss();
              }
 
              @Override
@@ -115,7 +149,19 @@ public class MyAdvertsActivity extends AppCompatActivity {
 
     }
 
+    public void alertRecoverAdvert(String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(message);
+        builder.setCancelable(false);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+
     private void components() {
         recyclerViewAdverts = binding.recyclerViewMyAdverts;
     }
+
+
 }

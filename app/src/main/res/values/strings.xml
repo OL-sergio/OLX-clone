@@ -25,6 +25,7 @@
     <string name="permiss_o_negada">Permissão Negada</string>
     <string name="para_utilizar_a_aplica_o_necess_rio_aceitar_as_permiss_es">Para utilizar a aplicação é necessário aceitar as permissões</string>
     <string name="confirmar">Confirmar</string>
+    <string name="recuperar_o_an_ncio">Recuperar o Anúncio</string>
 
 
     <string-array name="states">

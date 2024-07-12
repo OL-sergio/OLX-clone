@@ -63,7 +63,7 @@ public class AdvertsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         if ( item.getItemId() == R.id.menu_register){
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class ));
+            startActivity(new Intent(getApplicationContext(), LoginRegisterActivity.class ));
         }
 
         if (item.getItemId() ==  R.id.menu_adverts){

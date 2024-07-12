@@ -19,6 +19,7 @@ public class Advert {
     List<String> Photos;
 
     public Advert() {
+
         DatabaseReference advertReference = SettingsFirebase.getDatabaseReference()
                 .child("my_adverts");
         setIdAdvert(advertReference.push().getKey());
@@ -37,7 +38,6 @@ public class Advert {
 
     public void savePublicAdvert(){
 
-
         DatabaseReference advertReference = SettingsFirebase.getDatabaseReference()
                 .child("adverts");
 
@@ -46,6 +46,29 @@ public class Advert {
                 .child( getIdAdvert() )
                 .setValue(this);
     }
+
+
+    public void deleteMyAdvert(){
+
+        String idUser = SettingsFirebase.getUserID();
+        DatabaseReference advertReference = SettingsFirebase.getDatabaseReference()
+                .child("my_adverts")
+                .child( idUser )
+                .child( getIdAdvert() );
+        advertReference.removeValue();
+    }
+
+    public void deletePublicAdvert(){
+
+        DatabaseReference advertReference = SettingsFirebase.getDatabaseReference()
+                .child("adverts")
+                .child( getState() )
+                .child( getCategory() )
+                .child( getIdAdvert() );
+        advertReference.removeValue();
+    }
+
+
 
     public String getIdAdvert() {
         return idAdvert;

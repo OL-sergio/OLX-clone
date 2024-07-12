@@ -28,17 +28,17 @@
 
         <activity
             android:name=".activity.CreateAdvertActivity"
-            android:exported="true">
+            android:exported="false">
+        </activity>
+
+        <activity
+            android:name=".activity.MyAdvertsActivity"
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".activity.MyAdvertsActivity"
-            android:exported="false" >
         </activity>
 
         <activity
