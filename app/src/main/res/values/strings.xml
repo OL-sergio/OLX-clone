@@ -26,6 +26,10 @@
     <string name="para_utilizar_a_aplica_o_necess_rio_aceitar_as_permiss_es">Para utilizar a aplicação é necessário aceitar as permissões</string>
     <string name="confirmar">Confirmar</string>
     <string name="recuperar_o_an_ncio">Recuperar o Anúncio</string>
+    <string name="regi_o">Região</string>
+    <string name="categoria">Categoria</string>
+    <string name="_0_00">€ 0.00</string>
+    <string name="tv_lcd_sony_bravia_32">TV LCD Sony Bravia 32</string>
 
 
     <string-array name="states">

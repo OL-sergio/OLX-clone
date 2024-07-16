@@ -18,14 +18,14 @@
         android:paddingStart="@dimen/_18sp"
         android:paddingEnd="@dimen/_8sdp"
         android:paddingTop="@dimen/_8sdp"
-        android:paddingBottom="@dimen/_8sdp"
-        >
+        android:paddingBottom="@dimen/_8sdp">
 
         <ImageView
             android:id="@+id/imageView_rowAdvert"
-            android:layout_width="140dp"
+            android:layout_width="200sp"
             android:layout_height="140dp"
-            android:scaleType="fitCenter"
+            android:padding="@dimen/_16sp"
+            android:scaleType="centerCrop"
             android:src="@drawable/padrao" />
 
         <LinearLayout
@@ -42,7 +42,7 @@
                 android:id="@+id/textView_rowTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="TV LCD Sony Bravia 32 "
+                android:hint="@string/tv_lcd_sony_bravia_32"
                 android:textColor="@color/black_100"
                 android:textSize="@dimen/_16sp" />
 
@@ -50,8 +50,7 @@
                 android:id="@+id/textView_rowPrice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_8sdp"
-                android:hint="€ 0.00"
+                android:hint="@string/_0_00"
                 android:textColor="@color/black_100"
                 android:textSize="@dimen/_18sp"
                 android:textStyle="bold" />

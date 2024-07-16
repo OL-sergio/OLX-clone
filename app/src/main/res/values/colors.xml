@@ -7,6 +7,9 @@
     <color name="hot_pink_20">#327B1FA2</color>
     <color name="orange_100">#FF5722</color>
     <color name="orange_25">#42FF5725</color>
-    <color name="white_800">#88FFFFFF</color>
-    <color name="grey_100">#88858383</color>
+    <color name="white_50">#80FFFFFF</color>
+    <color name="grey_50">#80858383</color>
+    <color name="weak_grey_100">#E2E2E2</color>
+    <color name="Strong_grey_100">#B8B5B5</color>
+
 </resources>

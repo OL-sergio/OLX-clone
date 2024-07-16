@@ -38,8 +38,9 @@ import exemple.udemy.java.olx.utilities.CustomHorizontalProgressDialog;
 public class MyAdvertsActivity extends AppCompatActivity {
 
     private ActivityMyAdvertsBinding binding;
+
     private RecyclerView recyclerViewAdverts;
-    private List<Advert> advertList = new ArrayList<>();
+    private final List<Advert> advertList = new ArrayList<>();
     private AdapterAdverts adapterAdverts;
     private DatabaseReference databaseReferenceUserReference;
 
@@ -125,11 +126,12 @@ public class MyAdvertsActivity extends AppCompatActivity {
     private void recoverAdverts() {
 
         dialog.show();
+        advertList.clear();
 
          databaseReferenceUserReference.addValueEventListener(new ValueEventListener() {
              @Override
              public void onDataChange(@NonNull DataSnapshot snapshot) {
-                advertList.clear();
+
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()){
                     advertList.add(dataSnapshot.getValue(Advert.class));
 

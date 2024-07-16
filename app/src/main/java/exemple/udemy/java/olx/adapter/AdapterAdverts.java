@@ -11,9 +11,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import exemple.udemy.java.olx.R;
 import exemple.udemy.java.olx.model.Advert;
@@ -64,13 +67,16 @@ public class AdapterAdverts extends RecyclerView.Adapter<AdapterAdverts.MyViewHo
 
 
         Picasso.get().load(urlCover)
+                .resize(150,100)
                 .error(R.drawable.logo)
                 .into(holder.imageViewPhoto);
 
-       /* Glide.with(context)
-                .load(urlCover)
-                .useAnimationPool(true).error(R.drawable.logo)
-                .into(holder.imageViewPhoto);*/
+
+
+   /*Glide.with(context).load(urlCover)
+            .error(R.drawable.logo)
+            .apply(RequestOptions.overrideOf(140, 200))
+            .into(holder.imageViewPhoto);*/
 
     }
 

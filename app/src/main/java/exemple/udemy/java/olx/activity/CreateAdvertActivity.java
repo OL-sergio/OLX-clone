@@ -475,7 +475,7 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
                             finish();
 
                        }
-                       alertMessage("Anúncio criado com sucesso!");
+
                        hideProgressDialog();
 
                    } else {
@@ -488,6 +488,7 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
         urlTask.addOnCompleteListener(new OnCompleteListener<Uri>() {
             @Override
             public void onComplete(@NonNull Task<Uri> task) {
+                alertMessage("Anúncio criado com sucesso!");
                 String taskResult = String.valueOf(task.getResult());
                 Log.d(TAG, "onComplete: taskResult = " + taskResult);
             }
