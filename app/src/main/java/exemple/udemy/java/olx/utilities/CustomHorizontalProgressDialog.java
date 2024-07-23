@@ -31,13 +31,10 @@ public class CustomHorizontalProgressDialog extends Dialog {
 
         progressBar.setProgressDrawable(getDrawable(getContext(),R.drawable.custom_progress_bar));
 
-
-        ObjectAnimator progressBarAnimation = ObjectAnimator.ofInt(progressBar, "progress",0,100);
+        ObjectAnimator progressBarAnimation = ObjectAnimator.ofInt(progressBar, "progress",0, 100);
         progressBarAnimation.setDuration(3000);
-        progressBarAnimation.setRepeatCount(25);
-        progressBarAnimation.setInterpolator(new LinearInterpolator());
+        progressBarAnimation.setRepeatCount(199);
         progressBarAnimation.start();
-
 
     }
 

@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="@android:color/transparent"
-    android:padding="@dimen/_18sp"
+    android:padding="@dimen/_36dp"
     tools:context=".utilities.CustomHorizontalProgressDialog">
 
         <TextView

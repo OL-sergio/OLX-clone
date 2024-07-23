@@ -207,16 +207,14 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
 
                     Bitmap imageUrl = null;
                     try {
-                        imageUrl = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
 
+                        imageUrl = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
                         Bitmap resizedBitmap = Bitmap.createScaledBitmap(imageUrl, 200, 200, true);
 
                         Glide.with(this)
                                 .load(resizedBitmap)
                                 .into(imageViewAdvertA);
 
-                        imageViewAdvertA.setDrawingCacheEnabled(true);
-                        imageViewAdvertA.buildDrawingCache();
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
                         imageUrl.compress(Bitmap.CompressFormat.JPEG, 65, baos);
                         byte [] dataImage = baos.toByteArray();
@@ -226,6 +224,7 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
 
                     } catch (IOException e) {
                         throw new RuntimeException(e);
+
                     }
                 }
             });
@@ -241,16 +240,14 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
                     Bitmap imageUrl = null;
 
                     try {
-                        imageUrl = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
 
+                        imageUrl = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
                         Bitmap resizedBitmap = Bitmap.createScaledBitmap(imageUrl, 400, 400, true);
 
                         Glide.with(this)
                                 .load(resizedBitmap)
                                 .into(imageViewAdvertB);
 
-                        imageViewAdvertB.setDrawingCacheEnabled(true);
-                        imageViewAdvertB.buildDrawingCache();
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
                         imageUrl.compress(Bitmap.CompressFormat.JPEG, 65, baos);
                         byte [] dataImage = baos.toByteArray();
@@ -273,16 +270,14 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
 
                     Bitmap imageUrl = null;
                     try {
-                        imageUrl = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
 
+                        imageUrl = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
                         Bitmap resizedBitmap = Bitmap.createScaledBitmap(imageUrl, 400, 400, true);
 
                         Glide.with(this)
                                 .load(resizedBitmap)
                                 .into(imageViewAdvertC);
 
-                        imageViewAdvertC.setDrawingCacheEnabled(true);
-                        imageViewAdvertC.buildDrawingCache();
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
                         imageUrl.compress(Bitmap.CompressFormat.JPEG, 65, baos);
                         byte [] dataImage = baos.toByteArray();

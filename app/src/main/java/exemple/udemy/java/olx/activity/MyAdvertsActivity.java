@@ -1,5 +1,7 @@
 package exemple.udemy.java.olx.activity;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -15,6 +17,7 @@ import com.google.firebase.database.ValueEventListener;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 
@@ -44,7 +47,7 @@ public class MyAdvertsActivity extends AppCompatActivity {
     private AdapterAdverts adapterAdverts;
     private DatabaseReference databaseReferenceUserReference;
 
-    private CustomHorizontalProgressDialog dialog;
+    private CustomHorizontalProgressDialog dialogProgressBar;
 
 
     @Override
@@ -66,7 +69,7 @@ public class MyAdvertsActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        dialog = new CustomHorizontalProgressDialog(this);
+        dialogProgressBar = new CustomHorizontalProgressDialog(this);
 
         databaseReferenceUserReference = SettingsFirebase.getDatabaseReference()
                 .child("my_adverts")
@@ -90,7 +93,7 @@ public class MyAdvertsActivity extends AppCompatActivity {
 
         adapterAdverts = new AdapterAdverts(advertList, this);
         recyclerViewAdverts.setAdapter(adapterAdverts);
-
+        advertList.clear();
         recoverAdverts();
 
         recyclerViewAdverts.addOnItemTouchListener(
@@ -125,7 +128,7 @@ public class MyAdvertsActivity extends AppCompatActivity {
 
     private void recoverAdverts() {
 
-        dialog.show();
+        dialogProgressBar.show();
         advertList.clear();
 
          databaseReferenceUserReference.addValueEventListener(new ValueEventListener() {
@@ -140,12 +143,13 @@ public class MyAdvertsActivity extends AppCompatActivity {
                 Collections.reverse(advertList);
                 adapterAdverts.notifyDataSetChanged();
 
-                dialog.dismiss();
+                 dialogProgressBar.dismiss();
              }
 
              @Override
              public void onCancelled(@NonNull DatabaseError error) {
-
+                 alertRecoverAdvert("Erro ao recoperar os! Recarregue a página!");
+                 Log.d(TAG, "onCancelled: " + error.getMessage());
              }
          });
 

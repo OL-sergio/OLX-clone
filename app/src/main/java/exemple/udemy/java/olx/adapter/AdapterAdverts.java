@@ -75,7 +75,7 @@ public class AdapterAdverts extends RecyclerView.Adapter<AdapterAdverts.MyViewHo
 
    /*Glide.with(context).load(urlCover)
             .error(R.drawable.logo)
-            .apply(RequestOptions.overrideOf(140, 200))
+            .apply(RequestOptions.overrideOf(150, 100))
             .into(holder.imageViewPhoto);*/
 
     }
