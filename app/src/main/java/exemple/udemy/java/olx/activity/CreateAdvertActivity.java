@@ -79,7 +79,7 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
     private CustomHorizontalProgressDialog dialog;
 
     private Advert advert;
-    private FirebaseAuth auth;
+
 
     private static final int STORAGE_PERMISSION_CODE = 23;
 
@@ -93,8 +93,12 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
         setContentView(binding.getRoot());
 
         Toolbar toolbar = binding.toolbarCreateAdvert;
-        toolbar.setTitle(R.string.olx);
+        toolbar.setTitle(R.string.criar_an_ncio);
+        toolbar.setTitleTextColor(getColor(R.color.white_100));
         setSupportActionBar(toolbar);
+
+        Objects.requireNonNull(getSupportActionBar());
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         toolbar.setNavigationOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), MyAdvertsActivity.class);
@@ -106,13 +110,7 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
 
 
 
-
-        Objects.requireNonNull(getSupportActionBar());
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         //storageReference = SettingsFirebase.getStorageReference();
-        auth = SettingsFirebase.getFirebaseAuth();
-
 
         components();
         loadSpinner();
@@ -149,13 +147,14 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
 
         String[] statesStrings = getResources().getStringArray(R.array.states);
         ArrayAdapter<String> adapterStates = new ArrayAdapter<String>(
-                this, android.R.layout.simple_spinner_item, statesStrings);
+                this, android.R.layout.simple_spinner_dropdown_item, statesStrings);
         adapterStates.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerAdvertState.setAdapter(adapterStates);
 
+
         String[] categoriesStrings = getResources().getStringArray(R.array.categories);
         ArrayAdapter<String> adapterCategories = new ArrayAdapter<String>(
-                this, android.R.layout.simple_spinner_item, categoriesStrings);
+                this, android.R.layout.simple_spinner_dropdown_item, categoriesStrings);
         adapterCategories.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerAdvertCategory.setAdapter(adapterCategories);
 

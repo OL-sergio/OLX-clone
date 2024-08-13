@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.AdvertDetailsActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:fitsSystemWindows="true"
+            android:textAlignment="center"
+            android:theme="@style/Base.Theme.OLXclone">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar_adverts"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize" />
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <com.synnapps.carouselview.CarouselView
+            android:id="@+id/carouselView_detailsAdvert"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/_16sp">
+
+        <TextView
+            android:id="@+id/textView_detailsAdvertTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_4dp"
+            android:text="Bota pro Walk 3"
+            android:textColor="@color/black_100"
+            android:textSize="@dimen/_22dp" />
+
+        <TextView
+            android:id="@+id/textView_detailsAdvertPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="378.88"
+            android:padding="@dimen/_4dp"
+            android:textColor="@color/black_100"
+            android:textSize="@dimen/_22dp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_height="2dp"
+            android:background="@color/grey_50" />
+
+        <TextView
+            android:id="@+id/textView_detailsAdvertLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginBottom="@dimen/_8sdp"
+            android:drawablePadding="@dimen/_8sdp"
+            android:gravity="center_vertical"
+            android:textStyle="bold"
+            android:textColor="@color/black_100"
+            android:hint="SP"
+            android:padding="@dimen/_8sdp"
+            android:textSize="@dimen/_16sp"
+            app:drawableStartCompat="@drawable/ic_location_on_24" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_marginBottom="@dimen/_8sdp"
+            android:layout_height="2dp"
+            android:background="@color/grey_50" />
+
+        <TextView
+            android:id="@+id/textView_detailsAdvertCharacteristics"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black_100"
+            android:textSize="@dimen/_18sp"
+            android:layout_marginTop="@dimen/_8sdp"
+            />
+
+        <Button
+            android:id="@+id/button_detailsAdvertViewPhoneNumber"
+            android:layout_width="300dp"
+            android:layout_height="55dp"
+            android:textColor="@color/white_100"
+            android:textAllCaps="true"
+            android:textSize="@dimen/_18sp"
+            android:text="@string/ver_telefone"
+            android:layout_margin="@dimen/_16sp"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/button_ripple_effect"
+            />
+
+    </LinearLayout>
+</LinearLayout>

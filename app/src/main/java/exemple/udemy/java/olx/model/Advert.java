@@ -2,11 +2,12 @@ package exemple.udemy.java.olx.model;
 
 import com.google.firebase.database.DatabaseReference;
 
+import java.io.Serializable;
 import java.util.List;
 
 import exemple.udemy.java.olx.helper.SettingsFirebase;
 
-public class Advert {
+public class Advert implements Serializable {
 
     private String idAdvert;
     private String state;

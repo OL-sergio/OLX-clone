@@ -4,12 +4,13 @@
 
     <group android:id="@+id/group_logged" android:visible="false">
         <item android:id="@+id/menu_adverts"
-                android:title="@string/meus_an_ncios" />
+            android:title="@string/meus_an_ncios" />
         <item android:id="@+id/menu_logout"
             android:title="@string/sair" />
     </group>
 
-    <group android:id="@+id/group_not_logged" android:visible="false">
+    <group
+        android:id="@+id/group_not_logged" android:visible="false">
         <item android:id="@+id/menu_register"
             android:title="@string/register_entrar"
             app:showAsAction="always" />

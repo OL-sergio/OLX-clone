@@ -57,7 +57,8 @@ public class MyAdvertsActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         Toolbar toolbar = binding.toolbarMyAdverts;
-        toolbar.setTitle("My Adverts");
+        toolbar.setTitle(R.string.meus_an_ncios);
+        toolbar.setTitleTextColor(getColor(R.color.white_100));
         setSupportActionBar(toolbar);
 
         toolbar.setNavigationOnClickListener(view -> {
@@ -76,7 +77,6 @@ public class MyAdvertsActivity extends AppCompatActivity {
                 .child(SettingsFirebase.getUserID());
 
         components();
-
 
        /* Window window = this.getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -99,30 +99,28 @@ public class MyAdvertsActivity extends AppCompatActivity {
         recyclerViewAdverts.addOnItemTouchListener(
                 new RecyclerItemClickListener(
                         this, recyclerViewAdverts, new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
+                            @Override
+                            public void onItemClick(View view, int position) {
 
+                            }
+
+
+                            @Override
+                            public void onLongItemClick(View view, int position) {
+                                Advert selectedAdvert = advertList.get(position);
+                                selectedAdvert.deleteMyAdvert();
+                                selectedAdvert.deletePublicAdvert();
+
+                                adapterAdverts.notifyDataSetChanged();
+                            }
+
+                            @Override
+                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                        }
                     }
-
-
-                    @Override
-                    public void onLongItemClick(View view, int position) {
-                        Advert selectedAdvert = advertList.get(position);
-                        selectedAdvert.deleteMyAdvert();
-                        selectedAdvert.deletePublicAdvert();
-
-                        adapterAdverts.notifyDataSetChanged();
-                    }
-
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-                    }
-                }
-
-                ));
-
-
+                )
+        );
     }
 
 

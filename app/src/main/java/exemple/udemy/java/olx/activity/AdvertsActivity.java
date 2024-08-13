@@ -2,6 +2,8 @@ package exemple.udemy.java.olx.activity;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
+import static exemple.udemy.java.olx.helper.SettingsFirebase.getCurrentUser;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +11,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -22,6 +25,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,11 +34,13 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import exemple.udemy.java.olx.R;
 import exemple.udemy.java.olx.adapter.AdapterAdverts;
 import exemple.udemy.java.olx.databinding.ActivityAdvertsBinding;
 import exemple.udemy.java.olx.databinding.DialogSpinnerBinding;
+import exemple.udemy.java.olx.helper.RecyclerItemClickListener;
 import exemple.udemy.java.olx.helper.SettingsFirebase;
 import exemple.udemy.java.olx.model.Advert;
 import exemple.udemy.java.olx.utilities.CustomHorizontalProgressDialog;
@@ -63,7 +69,9 @@ public class AdvertsActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         Toolbar toolbar = binding.toolbarAdverts;
-        toolbar.setTitle(R.string.olx);
+        toolbar.setTitle(R.string.adverts);
+        toolbar.setTitleTextColor(getColor(R.color.white_100));
+        toolbar.setPopupTheme(R.style.OverflowMenuStyle);
         setSupportActionBar(toolbar);
 
         dialogProgressBar = new CustomHorizontalProgressDialog(this);
@@ -78,7 +86,7 @@ public class AdvertsActivity extends AppCompatActivity {
         databaseReferenceUserReference = SettingsFirebase.getDatabaseReference()
                 .child("adverts");
 
-        components();
+       components();
 
         recyclerViewPublicAdverts.setLayoutManager( new LinearLayoutManager(this ) );
         recyclerViewPublicAdverts.setHasFixedSize( true );
@@ -88,13 +96,34 @@ public class AdvertsActivity extends AppCompatActivity {
 
         recoverPublicAdverts();
 
-        buttonRegion.setOnClickListener(v ->
-                filterByState()
-        );
 
-        buttonCategory.setOnClickListener(v -> {
-                filterByCategory();
-        });
+        buttonCategory.setOnClickListener(view -> filterByCategory());
+
+        buttonRegion.setOnClickListener(view -> filterByState());
+
+        recyclerViewPublicAdverts.addOnItemTouchListener(
+                new RecyclerItemClickListener(
+                        this, recyclerViewPublicAdverts, new RecyclerItemClickListener.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                        }
+
+                        @Override
+                        public void onItemClick(View view, int position) {
+                            Advert advertList = advertsList.get(position);
+                            Intent intent = new Intent(getApplicationContext(), AdvertDetailsActivity.class);
+                            intent.putExtra("advertSelected", advertList);
+                            startActivity(intent);
+                        }
+
+                        @Override
+                        public void onLongItemClick(View view, int position) {
+
+                        }
+                    }
+                )
+        );
     }
 
     private void recoverPublicAdverts() {
@@ -145,8 +174,9 @@ public class AdvertsActivity extends AppCompatActivity {
 
         String[] statesStrings = getResources().getStringArray(R.array.states);
         ArrayAdapter<String> adapterStates = new ArrayAdapter<String>(
-                this, android.R.layout.select_dialog_item, statesStrings);
+                this, android.R.layout.simple_spinner_dropdown_item, statesStrings);
         adapterStates.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
         spinnerFilter.setAdapter(adapterStates);
 
         //dialogRegion.setView(viewSpinner);
@@ -247,7 +277,7 @@ public class AdvertsActivity extends AppCompatActivity {
 
             String[] categoriesStrings = getResources().getStringArray(R.array.categories);
             ArrayAdapter<String> adapterCategories = new ArrayAdapter<String>(
-                    this, android.R.layout.simple_spinner_item, categoriesStrings);
+                    this, android.R.layout.simple_spinner_dropdown_item, categoriesStrings);
             adapterCategories.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinnerFilter.setAdapter(adapterCategories);
 
@@ -279,6 +309,7 @@ public class AdvertsActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_adverts, menu);
+
         return super.onCreateOptionsMenu(menu);
     }
 

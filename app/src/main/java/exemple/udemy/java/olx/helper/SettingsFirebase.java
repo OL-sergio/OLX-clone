@@ -1,21 +1,31 @@
 package exemple.udemy.java.olx.helper;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.PrimitiveIterator;
+
 public class SettingsFirebase {
 
-    public static DatabaseReference databaseReference;
-    public static FirebaseAuth getFirebaseAuth;
-    public static StorageReference storageReference;
+    private static DatabaseReference databaseReference;
+    private static FirebaseAuth getFirebaseAuth;
+    private static StorageReference storageReference;
+    private static FirebaseUser userLogged;
 
 
     public static String getUserID(){
         FirebaseAuth auth = getFirebaseAuth();
         return auth.getCurrentUser().getUid();
+    }
+
+    public static FirebaseUser getCurrentUser(){
+       userLogged= getFirebaseAuth().getCurrentUser();
+       return userLogged;
+
     }
 
 

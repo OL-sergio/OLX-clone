@@ -66,4 +66,7 @@ dependencies {
     //Picasso
     implementation (libs.picasso)
 
+    implementation(libs.carouselview)
+
+
 }

@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">OLX-clone</string>
+    <string name="app_name">OLX</string>
     <string name="password">Password</string>
-    <string name="login">Login</string>
+    <string name="login">Entrar</string>
     <string name="registration">Registration</string>
     <string name="email">Email</string>
     <string name="olx">OLX</string>
@@ -30,10 +30,14 @@
     <string name="categoria">Categoria</string>
     <string name="_0_00">€ 0.00</string>
     <string name="tv_lcd_sony_bravia_32">TV LCD Sony Bravia 32</string>
+    <string name="ver_telefone">Ver telefone</string>
+    <string name="decri_o_de_an_ncio">Decrição de Anúncio</string>
+    <string name="registar">Criar utilizador\n</string>
+    <string name="adverts">Anúncios</string>
 
 
     <string-array name="states">
-        <item>" "</item>
+        <item>"Selecione Item "</item>
         <item>AC</item>
         <item>AL</item>
         <item>AM</item>
@@ -64,7 +68,7 @@
     </string-array>
 
     <string-array name="categories">
-        <item>""</item>
+        <item>"Selecione Item"</item>
         <item>Automóveis</item>
         <item>Imóveis</item>
         <item>Eletronicos</item>
