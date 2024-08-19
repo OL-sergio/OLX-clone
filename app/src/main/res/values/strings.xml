@@ -34,10 +34,11 @@
     <string name="decri_o_de_an_ncio">Decrição de Anúncio</string>
     <string name="registar">Criar utilizador\n</string>
     <string name="adverts">Anúncios</string>
+    <string name="selecione_uma_categoria">Categoria</string>
 
 
     <string-array name="states">
-        <item>"Selecione Item "</item>
+        <item>"Região"</item>
         <item>AC</item>
         <item>AL</item>
         <item>AM</item>
@@ -68,7 +69,7 @@
     </string-array>
 
     <string-array name="categories">
-        <item>"Selecione Item"</item>
+        <item>"Categorias"</item>
         <item>Automóveis</item>
         <item>Imóveis</item>
         <item>Eletronicos</item>

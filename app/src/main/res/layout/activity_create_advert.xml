@@ -97,8 +97,7 @@
                 android:paddingStart="@dimen/_8sdp"
                 android:layout_marginEnd="@dimen/_8sdp"
                 android:background="@drawable/dw_rectangle_round_corners_grey"
-                android:textColor="@color/black_100"
-                tools:ignore="RtlSymmetry" />
+                android:textColor="@color/black_100" />
 
             <Spinner
                 android:id="@+id/spinner_create_advert_category"
@@ -108,8 +107,7 @@
                 android:paddingStart="@dimen/_8sdp"
                 android:layout_marginStart="@dimen/_8sdp"
                 android:background="@drawable/dw_rectangle_round_corners_grey"
-                android:textColor="@color/black_100"
-                tools:ignore="RtlSymmetry" />
+                android:textColor="@color/black_100"/>
 
         </LinearLayout>
 

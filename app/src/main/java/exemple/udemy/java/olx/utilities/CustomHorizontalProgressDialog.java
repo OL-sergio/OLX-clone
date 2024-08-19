@@ -7,9 +7,7 @@ import android.animation.ObjectAnimator;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.view.animation.LinearInterpolator;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import exemple.udemy.java.olx.R;
 

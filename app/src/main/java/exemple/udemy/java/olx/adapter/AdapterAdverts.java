@@ -10,13 +10,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 import exemple.udemy.java.olx.R;
 import exemple.udemy.java.olx.model.Advert;
@@ -31,7 +27,7 @@ public class AdapterAdverts extends RecyclerView.Adapter<AdapterAdverts.MyViewHo
         this.context = context;
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
+    public static class MyViewHolder extends RecyclerView.ViewHolder{
 
         TextView textViewTitle;
         TextView textViewPrice;

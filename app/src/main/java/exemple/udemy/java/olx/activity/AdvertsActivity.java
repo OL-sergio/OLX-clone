@@ -2,9 +2,6 @@ package exemple.udemy.java.olx.activity;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
-import static exemple.udemy.java.olx.helper.SettingsFirebase.getCurrentUser;
-
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,7 +22,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -34,12 +30,11 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 import exemple.udemy.java.olx.R;
 import exemple.udemy.java.olx.adapter.AdapterAdverts;
 import exemple.udemy.java.olx.databinding.ActivityAdvertsBinding;
-import exemple.udemy.java.olx.databinding.DialogSpinnerBinding;
+import exemple.udemy.java.olx.databinding.SimpleSpinnerBinding;
 import exemple.udemy.java.olx.helper.RecyclerItemClickListener;
 import exemple.udemy.java.olx.helper.SettingsFirebase;
 import exemple.udemy.java.olx.model.Advert;
@@ -98,7 +93,6 @@ public class AdvertsActivity extends AppCompatActivity {
 
 
         buttonCategory.setOnClickListener(view -> filterByCategory());
-
         buttonRegion.setOnClickListener(view -> filterByState());
 
         recyclerViewPublicAdverts.addOnItemTouchListener(
@@ -165,7 +159,7 @@ public class AdvertsActivity extends AppCompatActivity {
         AlertDialog.Builder dialogRegion = new AlertDialog.Builder(this);
         dialogRegion.setTitle("Escolha a região desejada");
 
-        DialogSpinnerBinding binding = DialogSpinnerBinding.inflate(getLayoutInflater());
+        SimpleSpinnerBinding binding = SimpleSpinnerBinding.inflate(getLayoutInflater());
         binding.getRoot();
         spinnerFilter = binding.spinnerFilterDialog;
 
@@ -268,7 +262,7 @@ public class AdvertsActivity extends AppCompatActivity {
             AlertDialog.Builder dialogRegion = new AlertDialog.Builder(this);
             dialogRegion.setTitle("Escolha a categoria desejada");
 
-            DialogSpinnerBinding binding = DialogSpinnerBinding.inflate(getLayoutInflater());
+            SimpleSpinnerBinding binding = SimpleSpinnerBinding.inflate(getLayoutInflater());
             binding.getRoot();
             spinnerFilter = binding.spinnerFilterDialog;
 

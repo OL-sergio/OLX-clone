@@ -7,8 +7,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.util.PrimitiveIterator;
-
 public class SettingsFirebase {
 
     private static DatabaseReference databaseReference;
@@ -23,7 +21,7 @@ public class SettingsFirebase {
     }
 
     public static FirebaseUser getCurrentUser(){
-       userLogged= getFirebaseAuth().getCurrentUser();
+       userLogged = getFirebaseAuth().getCurrentUser();
        return userLogged;
 
     }

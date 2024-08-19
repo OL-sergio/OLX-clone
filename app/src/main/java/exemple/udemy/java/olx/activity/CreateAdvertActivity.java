@@ -13,7 +13,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.FileUtils;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Log;
@@ -22,7 +21,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -41,24 +39,20 @@ import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.santalu.maskara.widget.MaskEditText;
 
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
 import exemple.udemy.java.olx.R;
 import exemple.udemy.java.olx.databinding.ActivityCreateAdvertBinding;
-import exemple.udemy.java.olx.helper.SettingsFirebase;
 import exemple.udemy.java.olx.model.Advert;
 import exemple.udemy.java.olx.utilities.CustomHorizontalProgressDialog;
 
@@ -77,14 +71,12 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
     private ImageView imageViewAdvertB;
     private ImageView imageViewAdvertC;
     private CustomHorizontalProgressDialog dialog;
-
-    private Advert advert;
-
+    private Advert advert = new Advert();
 
     private static final int STORAGE_PERMISSION_CODE = 23;
 
-    private final List<byte[]> listOfPhotos = new ArrayList<>();
-    private final List<String> listOfPhotosUrl = new ArrayList<>();
+    private final ArrayList<byte[]> listOfRecoverPhotos = new ArrayList<>();
+    private final ArrayList<String> listOfPhotosUrl = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,7 +111,6 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
             requestForStoragePermissions();
 
         } else {
-            // AndroidPermissions are granted, proceed with your logic
 
         }
         /*
@@ -128,16 +119,10 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.setStatusBarColor(getColor(R.color.hot_pink_200));
         */
-        createAdvert.setOnClickListener(new View.OnClickListener() {
+        createAdvert.setOnClickListener(view -> {
+            validateAdvertData();
 
-            @Override
-            public void onClick(View view) {
-                validateDataAdvert(view);
-                saveAdvert();
-            }
         });
-
-
     }
 
     private void loadSpinner() {
@@ -145,16 +130,18 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
           "SP", "MT"
         };*/
 
-        String[] statesStrings = getResources().getStringArray(R.array.states);
+        String[] statesStrings = getResources().getStringArray(R.array.categories);
+        statesStrings[0] = "Região";
         ArrayAdapter<String> adapterStates = new ArrayAdapter<String>(
-                this, android.R.layout.simple_spinner_dropdown_item, statesStrings);
+                this, android.R.layout.simple_spinner_item, statesStrings);
         adapterStates.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerAdvertState.setAdapter(adapterStates);
 
 
         String[] categoriesStrings = getResources().getStringArray(R.array.categories);
+        categoriesStrings[0] = "Categorias";
         ArrayAdapter<String> adapterCategories = new ArrayAdapter<String>(
-                this, android.R.layout.simple_spinner_dropdown_item, categoriesStrings);
+                this, android.R.layout.simple_spinner_item, categoriesStrings);
         adapterCategories.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerAdvertCategory.setAdapter(adapterCategories);
 
@@ -193,13 +180,15 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
             }
         }
 
-        Log.d(TAG, "listOfPhotos"+ listOfPhotos);
+        Log.d(TAG, "listOfPhotos"+ listOfRecoverPhotos);
     }
 
     ActivityResultLauncher<Intent>  galleryActivityResultLauncherImageA = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
+            new ActivityResultContracts.StartActivityForResult(), result -> {
+
                if (result.getResultCode() == Activity.RESULT_OK && result.getData()!= null) {
+
+                    int arrayPosition = 0;
 
                     Uri uri = result.getData().getData();
                     Log.d(TAG, "onActivityResult"+ uri);
@@ -218,7 +207,7 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
                         imageUrl.compress(Bitmap.CompressFormat.JPEG, 65, baos);
                         byte [] dataImage = baos.toByteArray();
 
-                        listOfPhotosToArray(dataImage);
+                        listOfPhotosToArray(dataImage, arrayPosition);
 
 
                     } catch (IOException e) {
@@ -229,10 +218,10 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
             });
 
     ActivityResultLauncher<Intent>  galleryActivityResultLauncherImageB = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == Activity.RESULT_OK && result.getData()!= null) {
+            new ActivityResultContracts.StartActivityForResult(), result -> {
 
+                if (result.getResultCode() == Activity.RESULT_OK && result.getData()!= null) {
+                    int arrayPosition = 1;
                     Uri uri = result.getData().getData();
                     Log.d(TAG, "onActivityResult"+ uri);
 
@@ -251,7 +240,7 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
                         imageUrl.compress(Bitmap.CompressFormat.JPEG, 65, baos);
                         byte [] dataImage = baos.toByteArray();
 
-                        listOfPhotosToArray(dataImage);
+                        listOfPhotosToArray(dataImage, arrayPosition);
 
                     } catch (IOException e) {
                         throw new RuntimeException(e);
@@ -260,9 +249,10 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
             });
 
     ActivityResultLauncher<Intent>  galleryActivityResultLauncherImageC = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
+            new ActivityResultContracts.StartActivityForResult(), result -> {
+
                 if (result.getResultCode() == Activity.RESULT_OK && result.getData()!= null) {
+                    int arrayPosition = 2;
 
                     Uri uri = result.getData().getData();
                     Log.d(TAG, "onActivityResult"+ uri);
@@ -280,7 +270,7 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
                         imageUrl.compress(Bitmap.CompressFormat.JPEG, 65, baos);
                         byte [] dataImage = baos.toByteArray();
-                        listOfPhotosToArray(dataImage);
+                        listOfPhotosToArray(dataImage, arrayPosition);
 
 
                     } catch (IOException e) {
@@ -290,11 +280,19 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
             });
 
 
-    private void listOfPhotosToArray(byte[] imageUrl) {
-        listOfPhotos.add(imageUrl);
+    private void listOfPhotosToArray(byte[] dataImage, int arrayPosition ) {
+
+        Log.d(TAG, "dataI + " + dataImage + " at position " + arrayPosition);
+        if (dataImage != null) {
+            if (arrayPosition < listOfRecoverPhotos.size()) {
+                listOfRecoverPhotos.remove(arrayPosition);
+            }
+            listOfRecoverPhotos.add(arrayPosition, dataImage);
+            Log.d(TAG, "listOfRecoverPhotos updated: " + listOfRecoverPhotos);
+        } else {
+            Log.w(TAG, "dataImage is null, not adding to list");
+        }
     }
-
-
 
    public boolean checkStoragePermissions(){
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
@@ -377,19 +375,19 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
-    public void validateDataAdvert(View view) {
+    private void validateAdvertData() {
 
       advert = advertConfiguration();
       String price = String.valueOf(createAdvertPrice.getRawValue());
 
-        if( listOfPhotos.size() != 0 ){
-            if(!advert.getState().isEmpty()) {
-                if(!advert.getCategory().isEmpty()) {
-                    if (!advert.getTitle().isEmpty()){
-                        if (!price.isEmpty() && !price.equals("0")){
-                            if (!advert.getPhone().isEmpty() && advert.getPhone().length() >= 10){
-                                if (!advert.getDescription().isEmpty()){
-                                    saveAdvert();
+        if( listOfRecoverPhotos.size() != 0 ){
+            if( !advert.getState().isEmpty() ){
+                if( !advert.getCategory().isEmpty() ){
+                    if ( !advert.getTitle().isEmpty() ){
+                        if ( !price.isEmpty() && !price.equals("0") ){
+                            if ( !advert.getPhone().isEmpty() && advert.getPhone().length() >= 10 ){
+                                if ( !advert.getDescription().isEmpty() ){
+                                   saveAdvert();
                                 }else {
                                     alertMessage("Intreduza uma descrição!");
                                 }
@@ -415,24 +413,20 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
 
     private void saveAdvert() {
         // Adds the size of the Array of photos
-        for (int counter = 0; counter < listOfPhotos.size(); counter++) {
-            byte [] urlImages = listOfPhotos.get(counter);
+        for (int counter = 0; counter < listOfRecoverPhotos.size() ; counter++) {
+            byte [] urlImages = listOfRecoverPhotos.get(counter);
+            int listSize = listOfRecoverPhotos.size();
 
-            showProgressDialog();
-
-            int listSize = listOfPhotos.size();
-            Log.d(TAG, "images" + listSize + " " + urlImages);
-            saveStorageImages(urlImages, listSize, counter);
-
+            Log.d(TAG, "imagesList" + listSize + " " + urlImages);
+                showProgressDialog();
+                saveStorageImages(urlImages, listSize, counter);
         }
     }
 
 
 
-   private void saveStorageImages(byte[] urlImages, int listSize, int counter) {
+   private void saveStorageImages(byte[] urlImages, final int listSize, int counter) {
         Log.d(TAG, "images" + Arrays.toString(urlImages));
-
-
 
         StorageReference storageReference = FirebaseStorage.getInstance().getReference();
         final StorageReference advertImageReference = storageReference.child("images")
@@ -457,7 +451,6 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
                    if (task.isSuccessful()) {
                        Uri downloadUri = task.getResult();
                        String urlConverter = downloadUri.toString();
-
                        listOfPhotosUrl.add(urlConverter);
 
                        if(listSize == listOfPhotosUrl.size()) {
@@ -520,9 +513,6 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
         dialog.show();
     }
 
-
-
-
     private Advert advertConfiguration() {
 
         String state = spinnerAdvertState.getSelectedItem().toString();
@@ -532,7 +522,7 @@ public class CreateAdvertActivity extends AppCompatActivity implements View.OnCl
         String phone = createAdvertPhoneNumber.getText().toString();
         String description = createAdvertDescription.getText().toString();
 
-        advert = new Advert();
+        Advert advert = new Advert();
         advert.setCategory(category);
         advert.setState(state);
         advert.setTitle(title);

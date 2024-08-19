@@ -2,20 +2,16 @@ package exemple.udemy.java.olx.activity;
 
 import static exemple.udemy.java.olx.R.string.introduzir_email;
 import static exemple.udemy.java.olx.R.string.introduzir_palavra_pass;
-import static exemple.udemy.java.olx.helper.SettingsFirebase.*;
+import static exemple.udemy.java.olx.helper.SettingsFirebase.getCurrentUser;
+import static exemple.udemy.java.olx.helper.SettingsFirebase.getFirebaseAuth;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.Switch;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Dimension;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -33,9 +29,7 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.Objects;
 
 import exemple.udemy.java.olx.R;
-import exemple.udemy.java.olx.databinding.ActivityCreateAdvertBinding;
 import exemple.udemy.java.olx.databinding.ActivityLoginRegisterBinding;
-import exemple.udemy.java.olx.helper.SettingsFirebase;
 
 
 public class LoginRegisterActivity extends AppCompatActivity {
