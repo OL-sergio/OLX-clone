@@ -1,6 +1,5 @@
 # OLX Clone Application
 
-## 📱 Application Title
 **OLX Clone** - A simplified version of the OLX platform for buying and selling items.
 
 ---
