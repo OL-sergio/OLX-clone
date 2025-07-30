@@ -3,6 +3,7 @@ package exemple.udemy.java.olx.model;
 import com.google.firebase.database.DatabaseReference;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import exemple.udemy.java.olx.helper.SettingsFirebase;
@@ -17,7 +18,7 @@ public class Advert implements Serializable {
     private String price;
     private String phone;
 
-    List<String> Photos;
+    private List<String> Photos;
 
     public Advert() {
 
@@ -128,7 +129,7 @@ public class Advert implements Serializable {
     }
 
     public List<String> getPhotos() {
-        return Photos;
+        return Photos != null ? Photos : new ArrayList<>();
     }
 
     public void setPhotos(List<String> photos) {

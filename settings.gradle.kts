@@ -19,10 +19,6 @@ dependencyResolutionManagement {
         mavenCentral()
         maven("https://jitpack.io")
         maven("https://jcenter.bintray.com/")
-        maven(" https://mvnrepository.com/artifact/com.synnapps/carouselview")
-
-
-
     }
 }
 
